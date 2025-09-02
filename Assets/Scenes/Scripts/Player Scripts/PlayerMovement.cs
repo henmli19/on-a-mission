@@ -1,57 +1,74 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerMovement : MonoBehaviour
+[RequireComponent(typeof(Rigidbody2D))]
+public class RobotController : MonoBehaviour
 {
-
-    [SerializeField] private float speed = 5f;
-    [SerializeField] private float jumpForce = 5f;
     private Rigidbody2D rb;
+    private Animator animator;
 
-    private bool isGrounded = true;
+    [Header("Movement Settings")]
+    [SerializeField] private float moveSpeed = 5f;
+    [SerializeField] private float jumpForce = 5f;
+    [SerializeField] private float dashForce = 10f;
 
-    // Start is called before the first frame update
+
+    [SerializeField] private bool isGrounded = true;
+    
+    [SerializeField]private bool isDashing = false;
+  
+
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        animator = GetComponent<Animator>();
     }
 
-    // Update is called once per frame
     void Update()
     {
-        HandleMovement();
-
+        if (!isDashing) HandleMovement(); // ONLY move normally if not dashing
+        HandleJump();
+        HandleDash();
     }
 
-    private void HandleMovement()
+    void HandleMovement()
     {
-        Vector3 movement = Vector3.zero;
+        float moveInput = Input.GetAxisRaw("Horizontal");
+        rb.velocity = new Vector2(moveInput * moveSpeed, rb.velocity.y);
 
+        if (animator != null)
+            animator.SetFloat("Speed", Mathf.Abs(moveInput));
+    }
+
+    void HandleJump()
+    {
         if (Input.GetKeyDown(KeyCode.W) && isGrounded)
         {
             rb.velocity = new Vector2(rb.velocity.x, jumpForce);
             isGrounded = false;
+            if (animator != null) animator.SetTrigger("Jump");
         }
-        //if (Input.GetKey(KeyCode.S)) movement += Vector3.down;
-        if (Input.GetKey(KeyCode.A)) movement += Vector3.left;
-        if (Input.GetKey(KeyCode.D)) movement += Vector3.right;
-        if (movement != Vector3.zero) movement.Normalize();
+    }
+    
 
-        Vector3 newPosition = transform.position + movement * (speed * Time.deltaTime);
-        transform.position = newPosition;
+
+    void HandleDash()
+    {
+        if (Input.GetKeyDown(KeyCode.LeftShift) && !isDashing)
+        {
+            isDashing = true;
+            rb.velocity = new Vector2(transform.localScale.x * dashForce, rb.velocity.y);
+            Invoke(nameof(ResetDash), 0.3f); // dash lasts 0.3s
+        }
+    }
+
+    void ResetDash()
+    {
+        isDashing = false;
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-
-        // Simple ground check (tag your ground as "Ground")
-        if (collision.gameObject.CompareTag("Ground"))
-        {
+        if (collision.contacts[0].normal == Vector2.up)
             isGrounded = true;
-        }
     }
-
-
-
 }
