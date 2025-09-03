@@ -2,7 +2,9 @@ using UnityEngine;
 
 public class RedWin : MonoBehaviour
 {
+    
     public GameObject textBoxToDeactivate;
+    public GameObject textBoxToDeactivate2;
     public GameObject textBoxToActivate;
     public GameObject boxToDeactivate;
 
@@ -10,6 +12,9 @@ public class RedWin : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
+            if (textBoxToDeactivate2 != null)
+                textBoxToDeactivate2.SetActive(false);
+    
             if (textBoxToDeactivate != null)
                 textBoxToDeactivate.SetActive(false);
 
