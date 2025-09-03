@@ -10,9 +10,9 @@ public class RobotController : MonoBehaviour
     [SerializeField] private float moveSpeed = 5f;
     [SerializeField] private float jumpForce = 5f;
     [SerializeField] private float dashForce = 10f;
+    public GroundCheck groundCheck; 
 
-
-    [SerializeField] private bool isGrounded = true;
+  
     
     [SerializeField]private bool isDashing = false;
   
@@ -21,6 +21,7 @@ public class RobotController : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
+        
     }
 
     void Update()
@@ -41,10 +42,10 @@ public class RobotController : MonoBehaviour
 
     void HandleJump()
     {
-        if (Input.GetKeyDown(KeyCode.W) && isGrounded)
+       
+        if (Input.GetKeyDown(KeyCode.W) && groundCheck.isGrounded)
         {
             rb.velocity = new Vector2(rb.velocity.x, jumpForce);
-            isGrounded = false;
             if (animator != null) animator.SetTrigger("Jump");
         }
     }
@@ -69,6 +70,9 @@ public class RobotController : MonoBehaviour
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.contacts[0].normal == Vector2.up)
+        {
+            bool isGrounded;
             isGrounded = true;
+        }
     }
 }
