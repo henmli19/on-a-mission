@@ -7,28 +7,27 @@ public class RobotController : MonoBehaviour
     private Animator animator;
 
     [Header("Movement Settings")]
-    [SerializeField] private float moveSpeed = 5f;
-    [SerializeField] private float jumpForce = 5f;
-    [SerializeField] private float dashForce = 10f;
-    public GroundCheck groundCheck; 
+    [SerializeField] private float moveSpeed = 2f;
+    [SerializeField] private float jumpForce = 4.8f;
+    [SerializeField] private float dashForce = 6f;
+   
 
-  
-    
-    [SerializeField]private bool isDashing = false;
+    [SerializeField] private bool isGrounded = false;
+    [SerializeField] private bool isDashing = false;
   
 
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
-        
     }
 
     void Update()
     {
-        if (!isDashing) HandleMovement(); // ONLY move normally if not dashing
+        if (!isDashing) HandleMovement();
         HandleJump();
         HandleDash();
+        
     }
 
     void HandleMovement()
@@ -42,15 +41,16 @@ public class RobotController : MonoBehaviour
 
     void HandleJump()
     {
-       
-        if (Input.GetKeyDown(KeyCode.W) && groundCheck.isGrounded)
+        if (isGrounded)
         {
-            rb.velocity = new Vector2(rb.velocity.x, jumpForce);
-            if (animator != null) animator.SetTrigger("Jump");
+            if (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow))
+            {
+                rb.velocity = new Vector2(rb.velocity.x, jumpForce);
+                isGrounded = false;
+                if (animator != null) animator.SetTrigger("Jump");
+            }
         }
     }
-    
-
 
     void HandleDash()
     {
@@ -58,9 +58,14 @@ public class RobotController : MonoBehaviour
         {
             isDashing = true;
             rb.velocity = new Vector2(transform.localScale.x * dashForce, rb.velocity.y);
-            Invoke(nameof(ResetDash), 0.3f); // dash lasts 0.3s
+            if (animator != null) animator.SetTrigger("Dash");
+            Invoke(nameof(ResetDash), 0.3f);
         }
     }
+
+
+
+  
 
     void ResetDash()
     {
@@ -70,9 +75,6 @@ public class RobotController : MonoBehaviour
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.contacts[0].normal == Vector2.up)
-        {
-            bool isGrounded;
             isGrounded = true;
-        }
     }
 }
