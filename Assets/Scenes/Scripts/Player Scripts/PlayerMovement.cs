@@ -32,12 +32,17 @@ public class RobotController : MonoBehaviour
 
     void HandleMovement()
     {
-        float moveInput = Input.GetAxisRaw("Horizontal");
-        rb.velocity = new Vector2(moveInput * moveSpeed, rb.velocity.y);
+        float horizontal = Input.GetAxisRaw("Horizontal"); // A = -1, D = +1
 
-        if (animator != null)
-            animator.SetFloat("Speed", Mathf.Abs(moveInput));
+        rb.velocity = new Vector2(horizontal * moveSpeed, rb.velocity.y);
+
+        // Flip character based on movement direction
+        if (horizontal > 0)
+            transform.localScale = new Vector3(0.5f,0.5f, 0.5891364f);   // facing right
+        else if (horizontal < 0)
+            transform.localScale = new Vector3(-0.5f, 0.5f, 0.5891364f);  // facing left
     }
+
 
     void HandleJump()
     {
@@ -51,17 +56,19 @@ public class RobotController : MonoBehaviour
             }
         }
     }
-
     void HandleDash()
     {
         if (Input.GetKeyDown(KeyCode.LeftShift) && !isDashing)
         {
             isDashing = true;
             rb.velocity = new Vector2(transform.localScale.x * dashForce, rb.velocity.y);
+
             if (animator != null) animator.SetTrigger("Dash");
             Invoke(nameof(ResetDash), 0.3f);
         }
     }
+
+    
 
 
 
