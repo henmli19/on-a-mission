@@ -6,6 +6,7 @@ public class TutorialTextManager : MonoBehaviour
     [SerializeField] private GameObject jumpText;
     [SerializeField] private GameObject dashText;
     [SerializeField] private GameObject moveText;
+   
 
     void Update()
     {
@@ -25,6 +26,7 @@ public class TutorialTextManager : MonoBehaviour
         {
             dashText.SetActive(false);
         }
+ 
 
     }
 }
