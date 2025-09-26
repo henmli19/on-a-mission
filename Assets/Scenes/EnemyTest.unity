@@ -693,14 +693,27 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHealth: 100
+<<<<<<< Updated upstream
+=======
+  currentHealth: 0
+>>>>>>> Stashed changes
   moveSpeed: 2
   damage: 10
   detectionRange: 10
   attackRange: 10
   playerLayer:
+<<<<<<< Updated upstream
     serializedVersion: 2
     m_Bits: 8
   patrolRadius: 3
+=======
+    m_Bits: 8
+  patrolRadius: 3
+  startPosition: {x: 0, y: 0}
+  patrolTarget: {x: 0, y: 0}
+  player: {fileID: 0}
+  isDead: 0
+>>>>>>> Stashed changes
   hoverHeight: 1.5
   moveSpeedGeneral: 5
   moveSpeedAttack: 4
@@ -710,6 +723,13 @@ MonoBehaviour:
   chargeTime: 0.8
   hoverAmplitude: 0.2
   hoverFrequency: 2
+<<<<<<< Updated upstream
+=======
+  isCharging: 0
+  isWindup: 0
+  lastChargeTime: -999
+  hoverOffset: 0
+>>>>>>> Stashed changes
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
