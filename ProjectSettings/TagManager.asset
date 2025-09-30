@@ -6,6 +6,9 @@ TagManager:
   tags:
   - Ground
   - Enemy
+  - ElevatorStop
+  - ElevatorStartGoingDown
+  - ElevatorStartGoingUP
   layers:
   - Default
   - TransparentFX
