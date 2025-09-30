@@ -32,15 +32,15 @@ public class RobotController : MonoBehaviour
 
     void HandleMovement()
     {
-        float horizontal = Input.GetAxisRaw("Horizontal"); // A = -1, D = +1
+        float horizontal = Input.GetAxisRaw("Horizontal"); 
 
         rb.velocity = new Vector2(horizontal * moveSpeed, rb.velocity.y);
 
-        // Flip character based on movement direction
+        
         if (horizontal > 0)
-            transform.localScale = new Vector3(0.5f,0.5f, 0.5891364f);   // facing right
+            transform.localScale = new Vector3(0.04f,0.04f, 0.04713091f);   // facing right
         else if (horizontal < 0)
-            transform.localScale = new Vector3(-0.5f, 0.5f, 0.5891364f);  // facing left
+            transform.localScale = new Vector3(-0.04f, 0.04f, 0.04713091f);  // facing left
     }
 
 
