@@ -11,7 +11,6 @@ public class Drone : Enemy
     [Header("Movement")]
     public float moveRadius = 3f;           // Random roaming radius
     public float moveInterval = 3f;         // Time between roaming
-    public float moveSpeed = 2f;            // Regular move speed
     public float diveSpeed = 8f;            // Speed when diving toward player
     public float returnSpeed = 5f;          // Speed to return to hover height
 
@@ -31,6 +30,7 @@ public class Drone : Enemy
     protected override void Start()
     {
         base.Start();
+        moveSpeed = 2f;
         moveTarget = startPosition;
         hoverTarget = new Vector3(startPosition.x, startPosition.y + hoverHeight, transform.position.z);
         nextMoveTime = Time.time + moveInterval;
@@ -151,6 +151,6 @@ public class Drone : Enemy
 
     protected override void Attack()
     {
-        // Handled by DiveTowardPlayer()
+        // Handled by DiveTowardPlayer();
     }
 }

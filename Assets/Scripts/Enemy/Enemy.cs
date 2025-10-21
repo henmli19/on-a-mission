@@ -8,7 +8,7 @@ public abstract class Enemy : MonoBehaviour
     public float maxHealth = 100f;
     protected float currentHealth;
 
-    public float moveSpeed = 2f;
+    public float moveSpeed;
     public float damage = 10f;
 
     // Detection
