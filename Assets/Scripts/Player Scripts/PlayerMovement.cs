@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D))]
@@ -84,5 +85,17 @@ public class RobotController : MonoBehaviour
 
         // If the ray hits something on the ground layer, the robot is grounded
         isGrounded = hit.collider != null;
+    }
+    
+    private Coroutine speedBoostCoroutine;
+
+    public IEnumerator ApplySpeedBoost(float multiplier, float duration)
+    {
+        float originalSpeed = moveSpeed;
+        moveSpeed *= multiplier;
+
+        yield return new WaitForSeconds(duration);
+
+        moveSpeed = originalSpeed;
     }
 }
