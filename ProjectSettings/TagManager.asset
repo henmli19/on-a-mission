@@ -6,47 +6,16 @@ TagManager:
   tags:
   - Ground
   - Enemy
-<<<<<<< HEAD
   - Laser
   - Obstacle
-=======
-  - ElevatorStop
-  - ElevatorStartGoingDown
-  - ElevatorStartGoingUP
->>>>>>> Andrea
-  layers:
-  - Default
-  - TransparentFX
-  - Ignore Raycast
-  - Player
-  - Water
-  - UI
-  - Ground
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
+    layers:
+    - Default
+    - TransparentFX
+    - Ignore Raycast
+    - Player
+    - Water
+    - UI
+    - Obstacle
   m_SortingLayers:
   - name: Default
     uniqueID: 0
