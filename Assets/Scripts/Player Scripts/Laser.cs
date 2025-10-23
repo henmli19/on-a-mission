@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class Laser : MonoBehaviour
 {
-    [SerializeField] private float lifetime = 2f;
+    [SerializeField] private float lifetime = 30f;
 
     void Start()
     {
@@ -16,6 +16,5 @@ public class Laser : MonoBehaviour
             Destroy(collision.gameObject);
             Destroy(gameObject);
         }
-        
     }
 }
