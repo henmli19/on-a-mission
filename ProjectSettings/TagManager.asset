@@ -8,14 +8,39 @@ TagManager:
   - Enemy
   - Laser
   - Obstacle
-    layers:
-    - Default
-    - TransparentFX
-    - Ignore Raycast
-    - Player
-    - Water
-    - UI
-    - Obstacle
+  layers:
+  - Default
+  - TransparentFX
+  - Ignore Raycast
+  - 
+  - Water
+  - UI
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
   m_SortingLayers:
   - name: Default
     uniqueID: 0
