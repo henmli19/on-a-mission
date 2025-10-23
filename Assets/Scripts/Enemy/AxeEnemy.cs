@@ -146,7 +146,7 @@ public class AxeEnemy : Enemy
 
     protected override void Attack()
     {
-        // handled by SwingAxe()
+        
     }
 }
 

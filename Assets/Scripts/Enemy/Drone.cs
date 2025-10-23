@@ -4,9 +4,9 @@ using UnityEngine;
 public class Drone : Enemy
 {
     [Header("Drone Settings")]
-    public float hoverHeight = 1.5f;        // Fixed hover height
-    public float hoverSpeed = 2f;           // Up/down motion speed
-    public float hoverAmplitude = 0.1f;     // Up/down motion amplitude
+    public float hoverHeight = 1.5f;        
+    public float hoverSpeed = 2f;           
+    public float hoverAmplitude = 0.1f;     
 
     [Header("Movement")]
     public float moveRadius = 3f;           // Random roaming radius
@@ -30,6 +30,7 @@ public class Drone : Enemy
     protected override void Start()
     {
         base.Start();
+        
         moveSpeed = 2f;
         moveTarget = startPosition;
         hoverTarget = new Vector3(startPosition.x, startPosition.y + hoverHeight, transform.position.z);
@@ -151,6 +152,6 @@ public class Drone : Enemy
 
     protected override void Attack()
     {
-        // Handled by DiveTowardPlayer();
+        
     }
 }
