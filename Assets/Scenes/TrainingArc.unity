@@ -152,7 +152,7 @@ Transform:
   m_GameObject: {fileID: 4931881}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -79.02011, y: -8.498694, z: -9.82144}
+  m_LocalPosition: {x: -86.04011, y: -8.758693, z: -9.82144}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -254,7 +254,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 2
-  m_BackGroundColor: {r: 0, g: 0, b: 0.3647059, a: 0}
+  m_BackGroundColor: {r: 0.23285857, g: 0.72004944, b: 0.79622644, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
@@ -757,7 +757,7 @@ Transform:
   m_GameObject: {fileID: 808127011}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -75.4, y: -12.1, z: 0}
+  m_LocalPosition: {x: -82.42, y: -12.36, z: 0}
   m_LocalScale: {x: 0.4, y: 0.4, z: 0.47272724}
   m_ConstrainProportionsScale: 1
   m_Children:
@@ -871,6 +871,7 @@ MonoBehaviour:
   laserPrefab: {fileID: 7429275734304652944, guid: e769b3d882cf4ce4e8a9d06d840e1874, type: 3}
   firePoint: {fileID: 1156440298}
   shootDelay: 0.2
+  laserSpeed: 15
 --- !u!1 &896430916
 GameObject:
   m_ObjectHideFlags: 0
@@ -1161,7 +1162,7 @@ Transform:
   m_GameObject: {fileID: 1405417239}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -79.02011, y: -8.498694, z: -9.82144}
+  m_LocalPosition: {x: -86.04011, y: -8.758693, z: -9.82144}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:

@@ -5628,7 +5628,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.z
-    path: Pelvis
+    path: Pelvis/UP_RightLeg/DOWN_RightLeg
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -5640,7 +5640,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.y
-    path: Pelvis
+    path: Pelvis/UP_RightLeg/DOWN_RightLeg
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -5652,7 +5652,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.x
-    path: Pelvis
+    path: Pelvis/UP_RightLeg/DOWN_RightLeg
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -6024,7 +6024,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.x
-    path: Pelvis/UP_RightLeg/DOWN_RightLeg
+    path: Pelvis
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -6036,7 +6036,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.y
-    path: Pelvis/UP_RightLeg/DOWN_RightLeg
+    path: Pelvis
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -6048,10 +6048,17 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.z
-    path: Pelvis/UP_RightLeg/DOWN_RightLeg
+    path: Pelvis
     classID: 4
     script: {fileID: 0}
     flags: 0
   m_HasGenericRootTransform: 0
   m_HasMotionFloatCurves: 0
-  m_Events: []
+  m_Events:
+  - time: 0
+    functionName: 
+    data: 
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0
