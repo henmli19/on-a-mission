@@ -7,15 +7,16 @@ public class RobotController : MonoBehaviour
     private Animator animator;
 
     [Header("Movement Settings")]
-    [SerializeField] private float moveSpeed = 5f;
-    [SerializeField] private float jumpForce = 5f;
-    [SerializeField] private float dashForce = 10f;
+    [SerializeField] private float moveSpeed = 2f;
+    [SerializeField] private float jumpForce = 4.8f;
+    [SerializeField] private float dashForce = 6f;
 
-
+    [Header("Ground Check Settings")]
+    [SerializeField] private float groundCheckDistance = 0.1f; // length of raycast
+    [SerializeField] private LayerMask groundLayer; // choose what counts as ground
     [SerializeField] private bool isGrounded = true;
     
-    [SerializeField]private bool isDashing = false;
-  
+    private bool isDashing = false;
 
     void Start()
     {
@@ -25,31 +26,35 @@ public class RobotController : MonoBehaviour
 
     void Update()
     {
-        if (!isDashing) HandleMovement(); // ONLY move normally if not dashing
+        CheckGrounded(); // Update grounded state each frame
+
+        if (!isDashing)
+            HandleMovement();
+
         HandleJump();
         HandleDash();
     }
 
     void HandleMovement()
     {
-        float moveInput = Input.GetAxisRaw("Horizontal");
-        rb.velocity = new Vector2(moveInput * moveSpeed, rb.velocity.y);
+        float horizontal = Input.GetAxisRaw("Horizontal");
+        rb.velocity = new Vector2(horizontal * moveSpeed, rb.velocity.y);
 
-        if (animator != null)
-            animator.SetFloat("Speed", Mathf.Abs(moveInput));
+        if (horizontal > 0)
+            transform.localScale = new Vector3(0.45f, 0.45f, 0.5318182f); // facing right
+        else if (horizontal < 0)
+            transform.localScale = new Vector3(-0.45f, 0.45f, 0.5318182f); // facing left
     }
 
     void HandleJump()
     {
-        if (Input.GetKeyDown(KeyCode.W) && isGrounded)
+        if (isGrounded && (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow)))
         {
             rb.velocity = new Vector2(rb.velocity.x, jumpForce);
             isGrounded = false;
             if (animator != null) animator.SetTrigger("Jump");
         }
     }
-    
-
 
     void HandleDash()
     {
@@ -57,7 +62,9 @@ public class RobotController : MonoBehaviour
         {
             isDashing = true;
             rb.velocity = new Vector2(transform.localScale.x * dashForce, rb.velocity.y);
-            Invoke(nameof(ResetDash), 0.3f); // dash lasts 0.3s
+
+            if (animator != null) animator.SetTrigger("Dash");
+            Invoke(nameof(ResetDash), 0.3f);
         }
     }
 
@@ -66,9 +73,16 @@ public class RobotController : MonoBehaviour
         isDashing = false;
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    void CheckGrounded()
     {
-        if (collision.contacts[0].normal == Vector2.up)
-            isGrounded = true;
+        // Cast a ray straight down from the robot's position
+        RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.down, groundCheckDistance, groundLayer);
+
+        // Draw the ray in Scene view for debugging (green = hit, red = miss)
+        Color rayColor = hit.collider != null ? Color.green : Color.red;
+        Debug.DrawRay(transform.position, Vector2.down * groundCheckDistance, rayColor);
+
+        // If the ray hits something on the ground layer, the robot is grounded
+        isGrounded = hit.collider != null;
     }
 }
