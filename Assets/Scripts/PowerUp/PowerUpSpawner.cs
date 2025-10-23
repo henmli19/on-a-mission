@@ -18,7 +18,7 @@ public class PowerUpSpawner : MonoBehaviour
     {
         if (powerUpPrefabs.Length == 0) return;
 
-        // Spawn a random power-up
+        // Random Power Up, zwischen ein Area im Spiel
         int index = Random.Range(0, powerUpPrefabs.Length);
         Vector2 spawnPos = new Vector2(
             Random.Range(spawnAreaMin.x, spawnAreaMax.x),
