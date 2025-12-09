@@ -17,6 +17,8 @@ TagManager:
   - UI
   - PowerUp
   - 
+  - Minimap_PlayerDot
+  - Minimap_EnemyDot
   - 
   - 
   - 
@@ -38,9 +40,7 @@ TagManager:
   - 
   - 
   - 
-  - 
-  - 
-  - 
+  - Background
   m_SortingLayers:
   - name: Default
     uniqueID: 0

@@ -1,37 +1,44 @@
 using UnityEngine;
 
-public class RobotShooting : MonoBehaviour
+public class Shooting : MonoBehaviour
 {
     [SerializeField] private GameObject laserPrefab;
     [SerializeField] private Transform firePoint;
-    
-    [SerializeField] private float shootDelay = 0.1f; // seconds between shots
-    private float lastShootTime = 0f;
+
+    [Header("Settings")]
+    [SerializeField] private float shootDelay = 0.1f;
+    [SerializeField] private float laserSpeed = 30f; // adjustable speed
+
+    private float lastShootTime;
 
     void Update()
     {
-        // Check if enough time has passed since the last shot
-        if (Input.GetKeyDown(KeyCode.Space) && Time.time >= lastShootTime + shootDelay)
+        if (Input.GetMouseButton(0) && Time.time >= lastShootTime + shootDelay)
         {
             Shoot();
-            lastShootTime = Time.time; // reset timer
+            lastShootTime = Time.time;
         }
     }
 
     void Shoot()
     {
+        // Spawn the laser
         GameObject laser = Instantiate(laserPrefab, firePoint.position, Quaternion.identity);
 
-        bool facingRight = transform.localScale.x > 0;
+        // Find the direction from firePoint to mouse position
+        Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        Vector2 direction = (mousePos - firePoint.position).normalized;
 
+        // Apply velocity to the laser
         Rigidbody2D rb = laser.GetComponent<Rigidbody2D>();
         if (rb != null)
         {
-            rb.velocity = new Vector2(facingRight ? 10f : -10f, 0f); 
+            rb.velocity = direction * laserSpeed;
         }
 
+        // Flip the laser’s x-scale based on direction (optional)
         Vector3 scale = laser.transform.localScale;
-        scale.x = facingRight ? Mathf.Abs(scale.x) : -Mathf.Abs(scale.x);
+        scale.x = direction.x >= 0 ? Mathf.Abs(scale.x) : -Mathf.Abs(scale.x);
         laser.transform.localScale = scale;
     }
 }

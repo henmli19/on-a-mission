@@ -42,14 +42,14 @@ public class RobotController : MonoBehaviour
         rb.velocity = new Vector2(horizontal * moveSpeed, rb.velocity.y);
 
         if (horizontal > 0)
-            transform.localScale = new Vector3(0.45f, 0.45f, 0.5318182f); // facing right
+            transform.localScale = new Vector3(0.4f, 0.4f, 0.5318182f); // facing right
         else if (horizontal < 0)
-            transform.localScale = new Vector3(-0.45f, 0.45f, 0.5318182f); // facing left
+            transform.localScale = new Vector3(-0.4f, 0.4f, 0.5318182f); // facing left
     }
 
     void HandleJump()
     {
-        if (isGrounded && (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow)))
+        if (isGrounded && (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.Space)))
         {
             rb.velocity = new Vector2(rb.velocity.x, jumpForce);
             isGrounded = false;
