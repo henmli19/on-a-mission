@@ -1,5 +1,9 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:Assets/New Material.mat.meta
 guid: 8627cc91ca6a10d4ea81ac063e02d671
+========
+guid: de9b61b46a94cc24e91f7f4bd494c069
+>>>>>>>> Boran:Assets/Idle_Animation.anim.meta
 NativeFormatImporter:
   externalObjects: {}
   mainObjectFileID: 2100000
