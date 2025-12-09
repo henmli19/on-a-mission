@@ -3610,6 +3610,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b1f06919a88127d4486d22e7fcd276b0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  canMove: 1
   moveSpeed: 10
   jumpForce: 5
   dashForce: 50

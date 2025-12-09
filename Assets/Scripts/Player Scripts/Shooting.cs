@@ -7,7 +7,7 @@ public class Shooting : MonoBehaviour
 
     [Header("Settings")]
     [SerializeField] private float shootDelay = 0.1f;
-    [SerializeField] private float laserSpeed = 30f; // adjustable speed
+    [SerializeField] private float laserSpeed = 30f;
 
     private float lastShootTime;
 
@@ -22,23 +22,21 @@ public class Shooting : MonoBehaviour
 
     void Shoot()
     {
-        // Spawn the laser
         GameObject laser = Instantiate(laserPrefab, firePoint.position, Quaternion.identity);
 
-        // Find the direction from firePoint to mouse position
+        // Find direction
         Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         Vector2 direction = (mousePos - firePoint.position).normalized;
 
-        // Apply velocity to the laser
+        // Rotate laser
+        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+        laser.transform.rotation = Quaternion.Euler(0, 0, angle);
+
+        // Move laser
         Rigidbody2D rb = laser.GetComponent<Rigidbody2D>();
         if (rb != null)
         {
             rb.velocity = direction * laserSpeed;
         }
-
-        // Flip the laser’s x-scale based on direction (optional)
-        Vector3 scale = laser.transform.localScale;
-        scale.x = direction.x >= 0 ? Mathf.Abs(scale.x) : -Mathf.Abs(scale.x);
-        laser.transform.localScale = scale;
     }
 }

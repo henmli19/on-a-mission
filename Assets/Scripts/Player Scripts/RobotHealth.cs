@@ -43,7 +43,7 @@ public class RobotHealth : MonoBehaviour
             animator.SetTrigger("Die");
 
         // Disable your movement script so the robot doesn't keep moving
-        GetComponent<RobotController>().enabled = false;
+        GetComponent<PlayerMovement>().enabled = false;
 
         // Optional: destroy object after animation
         // Destroy(gameObject, 1.5f);

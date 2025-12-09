@@ -1,8 +1,11 @@
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D))]
-public class RobotController : MonoBehaviour
+public class PlayerMovement : MonoBehaviour
 {
+    public bool canMove = true;
+ 
+
     private Rigidbody2D rb;
     private Animator animator;
 
@@ -28,12 +31,21 @@ public class RobotController : MonoBehaviour
     {
         CheckGrounded(); // Update grounded state each frame
 
+         
+
+        if (!canMove) 
+        {
+            rb.velocity = Vector2.zero;
+            return;
+        }
+    
         if (!isDashing)
             HandleMovement();
 
         HandleJump();
         HandleDash();
     }
+    
 
     void HandleMovement()
     {

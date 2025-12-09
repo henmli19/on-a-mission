@@ -1,21 +1,39 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public class HealthBarUI : MonoBehaviour
+public class BatteryHealthUI : MonoBehaviour
 {
-    [SerializeField] private RobotHealth robotHealth;
-    [SerializeField] private Slider healthSlider;
+
+    public Image[] bars;   
+    
+    public int maxHealth = 5;
+    private int currentHealth;
 
     void Start()
     {
-        // Set max value
-        healthSlider.maxValue = robotHealth.MaxHealth;
-        healthSlider.value = robotHealth.GetHealth();
+        currentHealth = maxHealth;
+        UpdateUI();
     }
 
-    void Update()
+    public void TakeDamage(int amount)
     {
-        // Update the bar every frame
-        healthSlider.value = robotHealth.GetHealth();
+        currentHealth -= amount;
+        currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth);
+        UpdateUI();
+    }
+
+    public void AddHealth(int amount)
+    {
+        currentHealth += amount;
+        currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth);
+        UpdateUI();
+    }
+
+    private void UpdateUI()
+    {
+        for (int i = 0; i < bars.Length; i++)
+        {
+            bars[i].enabled = (i < currentHealth);
+        }
     }
 }
