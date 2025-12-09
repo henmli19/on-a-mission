@@ -4,7 +4,6 @@ using UnityEngine;
 public class PlayerMovement : MonoBehaviour
 {
     public bool canMove = true;
- 
 
     private Rigidbody2D rb;
     private Animator animator;
@@ -16,9 +15,9 @@ public class PlayerMovement : MonoBehaviour
 
     [Header("Ground Check Settings")]
     [SerializeField] private float groundCheckDistance = 0.1f; // length of raycast
-    [SerializeField] private LayerMask groundLayer; // choose what counts as ground
+    [SerializeField] private LayerMask groundLayer;            // choose what counts as ground
     [SerializeField] private bool isGrounded = true;
-    
+
     private bool isDashing = false;
 
     void Start()
@@ -31,21 +30,18 @@ public class PlayerMovement : MonoBehaviour
     {
         CheckGrounded(); // Update grounded state each frame
 
-         
-
-        if (!canMove) 
+        if (!canMove)
         {
             rb.velocity = Vector2.zero;
             return;
         }
-    
+
         if (!isDashing)
             HandleMovement();
 
         HandleJump();
         HandleDash();
     }
-    
 
     void HandleMovement()
     {
@@ -88,7 +84,12 @@ public class PlayerMovement : MonoBehaviour
     void CheckGrounded()
     {
         // Cast a ray straight down from the robot's position
-        RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.down, groundCheckDistance, groundLayer);
+        RaycastHit2D hit = Physics2D.Raycast(
+            transform.position,
+            Vector2.down,
+            groundCheckDistance,
+            groundLayer
+        );
 
         // Draw the ray in Scene view for debugging (green = hit, red = miss)
         Color rayColor = hit.collider != null ? Color.green : Color.red;
