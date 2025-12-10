@@ -11,4 +11,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/TheBunkerScene.unity
     guid: bac6ce172a03b654fbf1bc72517129e7
+  - enabled: 1
+    path: Assets/Scenes/Settings.unity
+    guid: dbdcf652f087f2943b95a776a3d38d1e
   m_configObjects: {}
