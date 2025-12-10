@@ -18,6 +18,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private LayerMask groundLayer;            // choose what counts as ground
     [SerializeField] private bool isGrounded = true;
     
+    [SerializeField] private Animator _Animator;
     
    
 
@@ -50,6 +51,14 @@ public class PlayerMovement : MonoBehaviour
 
         // Move the player
         rb.velocity = new Vector2(horizontal * moveSpeed, rb.velocity.y);
+        if (horizontal != 0)
+        {
+            _Animator.SetBool("isRunning", true);
+        }
+        else
+        {
+            _Animator.SetBool("isRunning", false);
+        }
 
         // Only flip when moving left or right
         if (horizontal > 0)
@@ -64,11 +73,21 @@ public class PlayerMovement : MonoBehaviour
         if (isGrounded && (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.Space)))
         {
             rb.velocity = new Vector2(rb.velocity.x, jumpForce);
+            
             isGrounded = false;
             
          
             
         }
+        if (isGrounded)
+        {
+            _Animator.SetBool("isJumping", false);
+        }
+        else
+        {
+            _Animator.SetBool("isJumping", true);
+        }
+        
     }
 
     void HandleDash()
