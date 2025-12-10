@@ -3,10 +3,12 @@ using UnityEngine.SceneManagement;
 
 public class StartMenu : MonoBehaviour
 {
+    
     public void StartGame()
     {
         // Load your game scene
-        SceneManager.LoadScene("BunkerCutscene");
+        SceneManager.LoadScene("TheBunkerScene");
+        Debug.Log("StartGame");
     }
 
     public void OpenLevels()
