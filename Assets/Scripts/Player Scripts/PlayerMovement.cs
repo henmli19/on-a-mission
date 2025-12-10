@@ -3,10 +3,10 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody2D))]
 public class PlayerMovement : MonoBehaviour
 {
-    public bool canMove = true;
+  
 
     private Rigidbody2D rb;
-    private Animator animator;
+   
 
     [Header("Movement Settings")]
     [SerializeField] private float moveSpeed = 2f;
@@ -17,42 +17,47 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float groundCheckDistance = 0.1f; // length of raycast
     [SerializeField] private LayerMask groundLayer;            // choose what counts as ground
     [SerializeField] private bool isGrounded = true;
+    
+    
+   
 
     private bool isDashing = false;
 
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
-        animator = GetComponent<Animator>();
+       
     }
 
     void Update()
     {
-        CheckGrounded(); // Update grounded state each frame
+        CheckGrounded(); 
 
-        if (!canMove)
-        {
-            rb.velocity = Vector2.zero;
-            return;
-        }
+        
 
         if (!isDashing)
             HandleMovement();
 
         HandleJump();
+        
+
         HandleDash();
     }
 
     void HandleMovement()
     {
         float horizontal = Input.GetAxisRaw("Horizontal");
+
+        // Move the player
         rb.velocity = new Vector2(horizontal * moveSpeed, rb.velocity.y);
 
+        // Only flip when moving left or right
         if (horizontal > 0)
-            transform.localScale = new Vector3(0.4f, 0.4f, 0.5318182f); // facing right
+            transform.localScale = new Vector3(Mathf.Abs(transform.localScale.x), transform.localScale.y, transform.localScale.z); // facing right
         else if (horizontal < 0)
-            transform.localScale = new Vector3(-0.4f, 0.4f, 0.5318182f); // facing left
+            transform.localScale = new Vector3(-Mathf.Abs(transform.localScale.x), transform.localScale.y, transform.localScale.z); // facing left
     }
+
 
     void HandleJump()
     {
@@ -60,7 +65,9 @@ public class PlayerMovement : MonoBehaviour
         {
             rb.velocity = new Vector2(rb.velocity.x, jumpForce);
             isGrounded = false;
-            if (animator != null) animator.SetTrigger("Jump");
+            
+         
+            
         }
     }
 
@@ -71,7 +78,7 @@ public class PlayerMovement : MonoBehaviour
             isDashing = true;
             rb.velocity = new Vector2(transform.localScale.x * dashForce, rb.velocity.y);
 
-            if (animator != null) animator.SetTrigger("Dash");
+            
             Invoke(nameof(ResetDash), 0.3f);
         }
     }
