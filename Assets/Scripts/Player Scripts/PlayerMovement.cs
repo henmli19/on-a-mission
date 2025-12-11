@@ -19,6 +19,8 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private bool isGrounded = true;
     
     [SerializeField] private Animator _Animator;
+    [SerializeField] private Vector2 groundCheckOffset = new Vector2(0, -0.5f);
+    [SerializeField] public bool inputEnabled = true;
     
    
 
@@ -32,17 +34,33 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
-        CheckGrounded(); 
+        CheckGrounded();
 
         
+        if (!inputEnabled)
+        {
+            rb.velocity = new Vector2(0, rb.velocity.y);
+            return;
+        }
 
         if (!isDashing)
             HandleMovement();
 
         HandleJump();
-        
-
         HandleDash();
+    }
+
+    public void DisableControls()
+    {
+       
+        inputEnabled = false; 
+        rb.velocity = Vector2.zero; 
+    }
+
+    public void EnableControls()
+    {
+    
+        inputEnabled = true; 
     }
 
     void HandleMovement()
@@ -60,11 +78,10 @@ public class PlayerMovement : MonoBehaviour
             _Animator.SetBool("isRunning", false);
         }
 
-        // Only flip when moving left or right
         if (horizontal > 0)
-            transform.localScale = new Vector3(Mathf.Abs(transform.localScale.x), transform.localScale.y, transform.localScale.z); // facing right
+            transform.localScale = new Vector3(Mathf.Abs(transform.localScale.x), transform.localScale.y, transform.localScale.z);
         else if (horizontal < 0)
-            transform.localScale = new Vector3(-Mathf.Abs(transform.localScale.x), transform.localScale.y, transform.localScale.z); // facing left
+            transform.localScale = new Vector3(-Mathf.Abs(transform.localScale.x), transform.localScale.y, transform.localScale.z); 
     }
 
 
@@ -73,21 +90,21 @@ public class PlayerMovement : MonoBehaviour
         if (isGrounded && (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.Space)))
         {
             rb.velocity = new Vector2(rb.velocity.x, jumpForce);
-            
             isGrounded = false;
-            
-         
-            
         }
-        if (isGrounded)
+
+        if (isGrounded )
         {
             _Animator.SetBool("isJumping", false);
         }
         else
         {
             _Animator.SetBool("isJumping", true);
+            Debug.Log("isJumping = " + _Animator.GetBool("isJumping"));
         }
-        
+
+       
+
     }
 
     void HandleDash()
@@ -111,17 +128,21 @@ public class PlayerMovement : MonoBehaviour
     {
         // Cast a ray straight down from the robot's position
         RaycastHit2D hit = Physics2D.Raycast(
-            transform.position,
+            (Vector2)transform.position + groundCheckOffset,
             Vector2.down,
             groundCheckDistance,
             groundLayer
         );
 
+
         // Draw the ray in Scene view for debugging (green = hit, red = miss)
         Color rayColor = hit.collider != null ? Color.green : Color.red;
-        Debug.DrawRay(transform.position, Vector2.down * groundCheckDistance, rayColor);
+        Debug.DrawRay((Vector2)transform.position + groundCheckOffset, Vector2.down * groundCheckDistance, rayColor);
+
 
         // If the ray hits something on the ground layer, the robot is grounded
         isGrounded = hit.collider != null;
     }
 }
+
+

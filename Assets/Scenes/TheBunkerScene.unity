@@ -2602,6 +2602,10 @@ MonoBehaviour:
   jumpText: {fileID: 328496295}
   dashText: {fileID: 119836643}
   moveText: {fileID: 264868911}
+  shootText: {fileID: 0}
+  InteractText: {fileID: 0}
+  tutorialPanel: {fileID: 0}
+  delay: 20
 --- !u!1001 &942765674
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3586,6 +3590,7 @@ MonoBehaviour:
   firePoint: {fileID: 1873064900}
   shootDelay: 0.2
   laserSpeed: 30
+  playerMovement: {fileID: 0}
 --- !u!61 &1215052191
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -3670,7 +3675,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b1f06919a88127d4486d22e7fcd276b0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  canMove: 1
   moveSpeed: 10
   jumpForce: 5
   dashForce: 50
@@ -3679,6 +3683,9 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   isGrounded: 1
+  _Animator: {fileID: 0}
+  groundCheckOffset: {x: 0, y: -0.5}
+  inputEnabled: 1
 --- !u!212 &1215052194
 SpriteRenderer:
   m_ObjectHideFlags: 0

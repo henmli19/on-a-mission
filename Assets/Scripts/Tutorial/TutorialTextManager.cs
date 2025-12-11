@@ -30,7 +30,7 @@ public class TutorialTextManager : MonoBehaviour
     
     void TextManagerTurnOff()
     {
-        if (Input.GetKeyDown(KeyCode.UpArrow)|| Input.GetKeyDown(KeyCode.W))
+        if (Input.GetKeyDown(KeyCode.Space)|| Input.GetKeyDown(KeyCode.W ))
         {
             jumpText.SetActive(false);
         }

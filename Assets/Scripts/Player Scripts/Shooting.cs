@@ -11,8 +11,14 @@ public class Shooting : MonoBehaviour
 
     private float lastShootTime;
 
+    // Reference to PlayerMovement
+    [SerializeField] private PlayerMovement playerMovement;
+
     void Update()
     {
+        // Stop shooting if movement/input is disabled
+        if (playerMovement != null && !playerMovement.inputEnabled) return;
+
         if (Input.GetMouseButton(0) && Time.time >= lastShootTime + shootDelay)
         {
             Shoot();
