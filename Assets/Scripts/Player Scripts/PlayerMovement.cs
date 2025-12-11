@@ -157,30 +157,21 @@ namespace Player_Scripts
         {
             canDash = false;
             isDashing = true;
-
             float originalGravity = rb.gravityScale;
             rb.gravityScale = 0f;
-
             float dashDirection = transform.localScale.x > 0 ? 1 : -1;
-
             rb.velocity = new Vector2(dashDirection * dashingPower, 0f);
-
             dashTrail.emitting = true;
-
             yield return new WaitForSeconds(dashingTime);
-
             dashTrail.emitting = false;
-
             rb.gravityScale = originalGravity;
             isDashing = false;
-
             yield return new WaitForSeconds(dashCooldown);
             canDash = true;
         }
 
            
         
-
         
         
     
