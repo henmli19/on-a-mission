@@ -4,7 +4,7 @@ using UnityEngine.UI;
 public class BatteryHealthUI : MonoBehaviour
 {
     public Image[] bars;   
-    public int maxHealth = 5;
+    public int maxHealth = 6;
     private int currentHealth;
     void Start()
     {
@@ -16,6 +16,10 @@ public class BatteryHealthUI : MonoBehaviour
         currentHealth -= amount;
         currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth);
         UpdateUI();
+        if (currentHealth == 0)
+        {
+            Destroy(gameObject);
+        }
     }
     public void AddHealth(int amount)
     {

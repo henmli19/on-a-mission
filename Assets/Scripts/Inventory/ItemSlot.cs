@@ -1,4 +1,5 @@
 using System;
+using Player_Scripts;
 using UnityEngine;
 using TMPro;
 using UnityEngine.EventSystems;
@@ -109,7 +110,7 @@ public class ItemSlot : MonoBehaviour, IPointerClickHandler
 
     private void UseSpeedBoost()
     {
-        RobotController robot = GameObject.FindGameObjectWithTag("Player").GetComponent<RobotController>();
+        PlayerMovement robot = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerMovement>();
 
         if (robot != null)
         {

@@ -43,6 +43,7 @@ GameObject:
   - component: {fileID: 2911558596287933936}
   - component: {fileID: 1069255678826772518}
   - component: {fileID: 8719503201155895947}
+  - component: {fileID: 8849087267827652860}
   m_Layer: 0
   m_Name: DroneLaser
   m_TagString: Enemy
@@ -60,8 +61,8 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 4.494977, y: -0.07573938, z: 0}
-  m_LocalScale: {x: 4, y: 4, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 0.1, y: 0.1, z: 0.025}
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 4974884148226889702}
   m_Father: {fileID: 0}
@@ -106,9 +107,9 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
-  m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
-  m_Color: {r: 1, g: 0, b: 0.84527016, a: 1}
+  m_SortingOrder: 2
+  m_Sprite: {fileID: 21300000, guid: 6ad310b63c431fc4ca802909247afd08, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -137,7 +138,7 @@ MonoBehaviour:
   attackRange: 10
   playerLayer:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 8
   patrolRadius: 3
   hoverHeight: 1.5
   hoverSpeed: 2
@@ -178,3 +179,48 @@ MonoBehaviour:
   laserPrefab: {fileID: 3296051891103254942, guid: c6b321dfb2ec9884592d023051ba5a6f, type: 3}
   firePoint: {fileID: 4974884148226889702}
   laserSpeed: 30
+--- !u!61 &8849087267827652860
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5399513893287719042}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 68.28389, y: 26.44}
+    newSize: {x: 1, y: 1}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1}
+  m_EdgeRadius: 0

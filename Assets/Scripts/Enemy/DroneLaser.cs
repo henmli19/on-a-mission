@@ -85,6 +85,7 @@ public class DroneLaser : Enemy
 
         // Spawn laser
         GameObject laser = Instantiate(laserPrefab, firePoint.position, Quaternion.identity);
+       
 
         // Rotate laser to face the player
         float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
@@ -97,8 +98,13 @@ public class DroneLaser : Enemy
             laserScript.SetDirection(direction, laserSpeed);
         }
 
-        Debug.Log($"{gameObject.name} fired a laser toward {player.name}");
-    }
+         // Destroy laser on hit
+
+
+
+            Debug.Log($"{gameObject.name} fired a laser toward {player.name}");
+        }
+    
 
     protected override void Patrol()
     {

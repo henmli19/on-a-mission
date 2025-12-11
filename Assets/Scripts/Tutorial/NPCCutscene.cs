@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.Playables;
 
-public class NPCCutsceneTrigger : MonoBehaviour
+public class NPCCutscene : MonoBehaviour
 {
     public PlayableDirector cutscene;  
 
