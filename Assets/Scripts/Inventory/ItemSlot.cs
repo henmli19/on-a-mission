@@ -129,6 +129,9 @@ public class ItemSlot : MonoBehaviour, IPointerClickHandler
         {
             quantityText.text = quantity.ToString();
         }
+        
+        //UI Bar
+        
     }
 
     public void ClearSlot()
