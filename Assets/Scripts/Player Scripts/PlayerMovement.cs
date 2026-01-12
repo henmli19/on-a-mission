@@ -15,7 +15,13 @@ namespace Player_Scripts
         private float moveSpeed = 2f;
 
         [SerializeField] private float jumpForce = 4.8f;
-        [SerializeField] private float dashForce = 6f;
+        
+        private bool canDash=true;
+         private bool isDashing;
+        [SerializeField] private float dashingPower = 24f;
+        [SerializeField] private float dashingTime = 0.2f;
+        [SerializeField] private float dashCooldown = 1f;
+        [SerializeField] private TrailRenderer dashTrail;
 
         [Header("Ground Check Settings")] [SerializeField]
         private float groundCheckDistance = 0.1f; // length of raycast
@@ -30,7 +36,7 @@ namespace Player_Scripts
 
 
 
-        private bool isDashing = false;
+        
 
         void Start()
         {
@@ -40,6 +46,10 @@ namespace Player_Scripts
 
         void Update()
         {
+            if (isDashing)
+            {
+                return;
+            }
             CheckGrounded();
 
 
@@ -53,7 +63,12 @@ namespace Player_Scripts
                 HandleMovement();
 
             HandleJump();
-            HandleDash();
+            if (Input.GetKeyDown(KeyCode.LeftShift) && canDash)
+            {
+               StartCoroutine(Dash());
+
+            
+            }
         }
 
 
@@ -116,22 +131,6 @@ namespace Player_Scripts
 
         }
 
-        void HandleDash()
-        {
-            if (Input.GetKeyDown(KeyCode.LeftShift) && !isDashing)
-            {
-                isDashing = true;
-                rb.velocity = new Vector2(transform.localScale.x * dashForce, rb.velocity.y);
-
-            
-                Invoke(nameof(ResetDash), 0.3f);
-            }
-        }
-
-        void ResetDash()
-        {
-            isDashing = false;
-        }
         
 
         void CheckGrounded()
@@ -153,6 +152,28 @@ namespace Player_Scripts
             // If the ray hits something on the ground layer, the robot is grounded
             isGrounded = hit.collider != null;
         }
+
+        public IEnumerator Dash()
+        {
+            canDash = false;
+            isDashing = true;
+            float originalGravity = rb.gravityScale;
+            rb.gravityScale = 0f;
+            float dashDirection = transform.localScale.x > 0 ? 1 : -1;
+            rb.velocity = new Vector2(dashDirection * dashingPower, 0f);
+            dashTrail.emitting = true;
+            yield return new WaitForSeconds(dashingTime);
+            dashTrail.emitting = false;
+            rb.gravityScale = originalGravity;
+            isDashing = false;
+            yield return new WaitForSeconds(dashCooldown);
+            canDash = true;
+        }
+
+           
+        
+        
+        
     
         private Coroutine speedBoostCoroutine;
 
