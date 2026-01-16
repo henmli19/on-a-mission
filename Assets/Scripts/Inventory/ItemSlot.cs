@@ -108,6 +108,10 @@ public class ItemSlot : MonoBehaviour, IPointerClickHandler
         }
     }
 
+    
+    public PowerUpTimerUI speedTimer;
+    public PowerUpTimerUI shieldTimer;
+    
     private void UseSpeedBoost()
     {
         PlayerMovement robot = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerMovement>();
@@ -131,9 +135,11 @@ public class ItemSlot : MonoBehaviour, IPointerClickHandler
         }
         
         //UI Bar
+        speedTimer.gameObject.SetActive(true);
+        speedTimer.StartTimer();
         
     }
-
+    
     public void ClearSlot()
         {
             itemName = "";
