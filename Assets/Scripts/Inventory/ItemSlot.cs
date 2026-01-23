@@ -52,7 +52,6 @@ public class ItemSlot : MonoBehaviour, IPointerClickHandler
 
         // Update the description
         this.itemDescription = itemDescription;
-        isFull = true;
 
         // Update the quantity
         this.quantity += quantity;
