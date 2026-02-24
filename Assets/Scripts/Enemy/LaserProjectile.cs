@@ -30,20 +30,4 @@ public class LaserProjectile : MonoBehaviour
     {
         transform.Translate(direction * (speed * Time.deltaTime), Space.World);
     }
-
-    private void OnTriggerEnter2D(Collider2D other)
-    {
-        if (other.CompareTag("Player"))
-        {
-            BatteryHealthUI health = other.GetComponent<BatteryHealthUI>();
-            Debug.Log("sdfg");
-
-            if (health != null)
-            {
-                health.TakeDamage(damage);
-            }
-
-            Destroy(gameObject);
-        }
-    }
 }

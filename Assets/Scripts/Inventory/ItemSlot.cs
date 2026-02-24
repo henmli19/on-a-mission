@@ -104,11 +104,9 @@ public class ItemSlot : MonoBehaviour, IPointerClickHandler
         if (itemName == "Speed Boost")
         {
             UseSpeedBoost();
-        }
-
-        if (itemName == "Shield")
+        } else if (itemName == "Shield")
         {
-            // Shield-Logik Methode hier.
+            UseShield();
         }
     }
     
@@ -140,6 +138,34 @@ public class ItemSlot : MonoBehaviour, IPointerClickHandler
         //UI Timer Bar
         speedTimer.gameObject.SetActive(true);
         speedTimer.StartTimer();
+    }
+    
+    private void UseShield()
+    {
+        PlayerMovement robot = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerMovement>();
+
+        if (robot != null)
+        {
+            // Start Coroutine
+            robot.StartCoroutine(robot.ApplyShield(5f));
+        }
+
+        quantity--;
+
+        if (quantity <= 0)
+        {
+            ClearSlot();
+        }
+        else
+        {
+            quantityText.text = quantity.ToString();
+        }
+
+        if (shieldTimer != null)
+        {
+            shieldTimer.gameObject.SetActive(true);
+            shieldTimer.StartTimer();
+        }
     }
     
     public void ClearSlot()
