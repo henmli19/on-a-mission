@@ -27,7 +27,7 @@ public class DroneLaser : Enemy
     {
         base.Start();
         moveSpeed = 2.5f;
-        moveTarget = startPosition;
+        moveTarget = (Vector2)transform.position; // Set initial target to current spot
         nextMoveTime = Time.time + moveInterval;
 
         if (player == null)
@@ -39,72 +39,53 @@ public class DroneLaser : Enemy
 
     protected override void Update()
     {
-        if (isDead) return;
+        if (isDead || player == null) return;
 
-        float hoverY = Mathf.Sin(Time.time * hoverSpeed) * hoverAmplitude;
-        float distanceToPlayer = player ? Vector2.Distance(transform.position, player.position) : Mathf.Infinity;
+        float distanceToPlayer = Vector2.Distance(transform.position, player.position);
 
+        // 1. Detection Logic
         isAttacking = distanceToPlayer <= detectionRange;
 
         if (isAttacking)
         {
+            // 2. Attack Logic
             if (distanceToPlayer <= attackRange && Time.time >= nextAttackTime)
             {
                 Attack();
                 nextAttackTime = Time.time + attackInterval;
             }
-
-            // Face player visually
-            Vector3 direction = (player.position - transform.position).normalized;
-            float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-            transform.rotation = Quaternion.Euler(0, 0, angle - 90);
+            // Note: Rotation code is GONE. He stays facing the same way.
         }
         else
         {
+            // 3. Only Patrol if NOT attacking
             Patrol();
         }
 
-        // Hover up and down
+        // 4. Hover Logic (Applied to the visual offset, not hard-resetting position)
+        float hoverY = Mathf.Sin(Time.time * hoverSpeed) * hoverAmplitude;
         transform.position = new Vector3(
             transform.position.x,
-            startPosition.y + hoverHeight + hoverY,
+            transform.position.y + (hoverY * Time.deltaTime * 10), // Subtle hover adjustment
             transform.position.z
         );
     }
 
     protected override void Attack()
     {
-        if (laserPrefab == null || firePoint == null)
-        {
-            Debug.LogWarning("DroneLaser missing laserPrefab or firePoint!");
-            return;
-        }
+        if (laserPrefab == null || firePoint == null) return;
 
-        // Get direction from firePoint to player
         Vector2 direction = (player.position - firePoint.position).normalized;
 
-        // Spawn laser
+        // We spawn with identity, but SetDirection will immediately fix the rotation
         GameObject laser = Instantiate(laserPrefab, firePoint.position, Quaternion.identity);
        
-
-        // Rotate laser to face the player
-        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-        laser.transform.rotation = Quaternion.Euler(0, 0, angle);
-
-        // Move it toward player
         LaserProjectile laserScript = laser.GetComponent<LaserProjectile>();
         if (laserScript != null)
         {
             laserScript.SetDirection(direction, laserSpeed);
         }
-
-         // Destroy laser on hit
-
-
-
-            Debug.Log($"{gameObject.name} fired a laser toward {player.name}");
-        }
-    
+    }
 
     protected override void Patrol()
     {
@@ -124,6 +105,6 @@ public class DroneLaser : Enemy
     private void ChooseNewTarget()
     {
         Vector2 randomOffset = Random.insideUnitCircle * moveRadius;
-        moveTarget = startPosition + randomOffset;
+        moveTarget = (Vector2)startPosition + randomOffset;
     }
 }
