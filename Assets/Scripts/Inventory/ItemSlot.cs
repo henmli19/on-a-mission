@@ -105,8 +105,12 @@ public class ItemSlot : MonoBehaviour, IPointerClickHandler
         {
             UseSpeedBoost();
         }
-    }
 
+        if (itemName == "Shield")
+        {
+            // Shield-Logik Methode hier.
+        }
+    }
     
     public PowerUpTimerUI speedTimer;
     public PowerUpTimerUI shieldTimer;
@@ -117,11 +121,11 @@ public class ItemSlot : MonoBehaviour, IPointerClickHandler
 
         if (robot != null)
         {
-            // Start power-up
+            // Beginn SpeedBoost Coroutine
             robot.StartCoroutine(robot.ApplySpeedBoost(2f, 5f));
         }
 
-        // Reduce quantity
+        // Quantity vom Power Ups reduzieren.
         quantity--;
 
         if (quantity <= 0)
@@ -133,10 +137,9 @@ public class ItemSlot : MonoBehaviour, IPointerClickHandler
             quantityText.text = quantity.ToString();
         }
         
-        //UI Bar
+        //UI Timer Bar
         speedTimer.gameObject.SetActive(true);
         speedTimer.StartTimer();
-        
     }
     
     public void ClearSlot()

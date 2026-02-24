@@ -59,4 +59,29 @@ public class InventoryManager : MonoBehaviour
             itemSlot[i].thisItemSelected = false;
         }
     }
+    
+    public void LoadInventory(List<InventorySaveData> savedItems)
+    {
+        // Clear all current slots first
+        foreach (var slot in itemSlot)
+        {
+            slot.ClearSlot();
+        }
+
+        // Fill slots from save data
+        foreach (var data in savedItems)
+        {
+            // Look for the ScriptableObject in Resources/Items/
+            SpeedBoostItem itemData = Resources.Load<SpeedBoostItem>("Items/" + data.itemName);
+
+            if (itemData != null)
+            {
+                AddItem(itemData.itemName, data.quantity, itemData.itemSprite, itemData.itemDescription);
+            }
+            else
+            {
+                Debug.LogWarning("Could not find Item Data for: " + data.itemName);
+            }
+        }
+    }
 }
