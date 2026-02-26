@@ -117,9 +117,6 @@ namespace Player_Scripts
                 _Animator.SetBool("isJumping", true);
                 Debug.Log("isJumping = " + _Animator.GetBool("isJumping"));
             }
-
-       
-
         }
         
         void CheckGrounded()

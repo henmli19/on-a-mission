@@ -9,10 +9,19 @@ public class PowerUpTimerUI : MonoBehaviour
     public Image[] bars;
 
     private float segmentDuration;
-
+    
+    // Instanzen
+    public static PowerUpTimerUI SpeedInstance;
+    public static PowerUpTimerUI ShieldInstance;
+    public bool isShieldTimer;
+    
     void Awake()
     {
+        if (isShieldTimer) ShieldInstance = this;
+        else SpeedInstance = this;
+        
         segmentDuration = powerUpDuration / bars.Length;
+        gameObject.SetActive(false);
     }
 
     public void StartTimer()
