@@ -6003,7 +6003,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Press Tab to Open The Inventory
+  m_text: Press I to Open The Inventory
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: c44beed419df6fc49b76eefae7c91a24, type: 2}
   m_sharedMaterial: {fileID: 9051150976177667536, guid: c44beed419df6fc49b76eefae7c91a24, type: 2}
