@@ -126,7 +126,6 @@ GameObject:
   - component: {fileID: 7286040997272665127}
   - component: {fileID: 2911558596287933936}
   - component: {fileID: 1069255678826772518}
-  - component: {fileID: 8719503201155895947}
   - component: {fileID: 8849087267827652860}
   m_Layer: 0
   m_Name: DroneLaser
@@ -219,8 +218,8 @@ MonoBehaviour:
   maxHealth: 100
   moveSpeed: 0
   damage: 10
-  detectionRange: 10
-  attackRange: 10
+  detectionRange: 20
+  attackRange: 20
   playerLayer:
     serializedVersion: 2
     m_Bits: 8
@@ -234,36 +233,6 @@ MonoBehaviour:
   laserPrefab: {fileID: 3296051891103254942, guid: c6b321dfb2ec9884592d023051ba5a6f, type: 3}
   firePoint: {fileID: 4974884148226889702}
   laserSpeed: 10
---- !u!114 &8719503201155895947
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5399513893287719042}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ab6c981b7a0e4fd4bace3f5360d2fbe5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  maxHealth: 100
-  moveSpeed: 0
-  damage: 10
-  detectionRange: 30
-  attackRange: 20
-  playerLayer:
-    serializedVersion: 2
-    m_Bits: 8
-  patrolRadius: 3
-  hoverHeight: 1.5
-  hoverSpeed: 2
-  hoverAmplitude: 0.1
-  moveRadius: 100
-  moveInterval: 2
-  attackInterval: 2
-  laserPrefab: {fileID: 3296051891103254942, guid: c6b321dfb2ec9884592d023051ba5a6f, type: 3}
-  firePoint: {fileID: 4974884148226889702}
-  laserSpeed: 30
 --- !u!61 &8849087267827652860
 BoxCollider2D:
   m_ObjectHideFlags: 0

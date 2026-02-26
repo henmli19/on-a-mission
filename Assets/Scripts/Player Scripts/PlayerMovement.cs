@@ -6,18 +6,15 @@ namespace Player_Scripts
     [RequireComponent(typeof(Rigidbody2D))]
     public class PlayerMovement : MonoBehaviour
     {
-
-
         private Rigidbody2D rb;
-
-
+        
         [Header("Movement Settings")] [SerializeField]
         private float moveSpeed = 2f;
 
         [SerializeField] private float jumpForce = 4.8f;
         
         private bool canDash=true;
-         private bool isDashing;
+        private bool isDashing;
         [SerializeField] private float dashingPower = 24f;
         [SerializeField] private float dashingTime = 0.2f;
         [SerializeField] private float dashCooldown = 1f;
@@ -32,12 +29,9 @@ namespace Player_Scripts
         [SerializeField] private Animator _Animator;
         [SerializeField] private Vector2 groundCheckOffset = new Vector2(0, -0.5f);
         [SerializeField] public bool inputEnabled = true;
-      
-
-
-
         
-
+        public bool isShielded = false;
+        
         void Start()
         {
             rb = GetComponent<Rigidbody2D>();
@@ -70,9 +64,7 @@ namespace Player_Scripts
             
             }
         }
-
-
-    
+        
 
     public void DisableControls()
         {
@@ -107,8 +99,7 @@ namespace Player_Scripts
             else if (horizontal < 0)
                 transform.localScale = new Vector3(-Mathf.Abs(transform.localScale.x), transform.localScale.y, transform.localScale.z); 
         }
-
-
+        
         void HandleJump()
         {
             if (isGrounded && (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.Space)))
@@ -130,9 +121,7 @@ namespace Player_Scripts
        
 
         }
-
         
-
         void CheckGrounded()
         {
             // Cast a ray straight down from the robot's position
@@ -169,11 +158,6 @@ namespace Player_Scripts
             yield return new WaitForSeconds(dashCooldown);
             canDash = true;
         }
-
-           
-        
-        
-        
     
         private Coroutine speedBoostCoroutine;
 
@@ -185,6 +169,31 @@ namespace Player_Scripts
             yield return new WaitForSeconds(duration);
 
             moveSpeed = originalSpeed;
+        }
+        
+        public IEnumerator ApplyShield(float duration)
+        {
+            isShielded = true;
+            // Visuelles Effekt hier spaeter.
+    
+            yield return new WaitForSeconds(duration);
+    
+            isShielded = false;
+        }
+        
+        private void OnTriggerEnter2D(Collider2D other)
+        {
+            if (other.CompareTag("Enemy"))
+            {
+                BatteryHealthUI health = GetComponent<BatteryHealthUI>();
+
+                if (health != null && isShielded == false)
+                {
+                    health.TakeDamage(1);
+                }
+
+                Destroy(other.gameObject);
+            }
         }
     }
 }

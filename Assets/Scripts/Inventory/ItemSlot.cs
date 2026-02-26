@@ -52,7 +52,6 @@ public class ItemSlot : MonoBehaviour, IPointerClickHandler
 
         // Update the description
         this.itemDescription = itemDescription;
-        isFull = true;
 
         // Update the quantity
         this.quantity += quantity;
@@ -105,20 +104,26 @@ public class ItemSlot : MonoBehaviour, IPointerClickHandler
         if (itemName == "Speed Boost")
         {
             UseSpeedBoost();
+        } else if (itemName == "Shield")
+        {
+            UseShield();
         }
     }
-
+    
+    public PowerUpTimerUI speedTimer;
+    public PowerUpTimerUI shieldTimer;
+    
     private void UseSpeedBoost()
     {
         PlayerMovement robot = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerMovement>();
 
         if (robot != null)
         {
-            // Start power-up
+            // Beginn SpeedBoost Coroutine
             robot.StartCoroutine(robot.ApplySpeedBoost(2f, 5f));
         }
 
-        // Reduce quantity
+        // Quantity vom Power Ups reduzieren.
         quantity--;
 
         if (quantity <= 0)
@@ -129,8 +134,40 @@ public class ItemSlot : MonoBehaviour, IPointerClickHandler
         {
             quantityText.text = quantity.ToString();
         }
+        
+        //UI Timer Bar
+        speedTimer.gameObject.SetActive(true);
+        speedTimer.StartTimer();
     }
+    
+    private void UseShield()
+    {
+        PlayerMovement robot = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerMovement>();
 
+        if (robot != null)
+        {
+            // Start Coroutine
+            robot.StartCoroutine(robot.ApplyShield(5f));
+        }
+
+        quantity--;
+
+        if (quantity <= 0)
+        {
+            ClearSlot();
+        }
+        else
+        {
+            quantityText.text = quantity.ToString();
+        }
+
+        if (shieldTimer != null)
+        {
+            shieldTimer.gameObject.SetActive(true);
+            shieldTimer.StartTimer();
+        }
+    }
+    
     public void ClearSlot()
         {
             itemName = "";

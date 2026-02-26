@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 330cb84321c46184694678365d1bca02, type: 3}
+  m_Name: ShieldItem
+  m_EditorClassIdentifier: 
+  itemName: Shield
+  itemSprite: {fileID: 21300000, guid: 6ec1683d7590fee438e6c451518dff9e, type: 3}
+  itemDescription: Use this item to shield yourself for 5 seconds.
+  duration: 5
