@@ -105,11 +105,15 @@ public class ItemSlot : MonoBehaviour, IPointerClickHandler
         if (itemName == "Speed Boost")
         {
             UseSpeedBoost();
-        } else if (itemName == "Shield")
+        }
+        else if (itemName == "Shield")
         {
             UseShield();
         }
+        else if (itemName == "Heal"){
+            UseHeal();
     }
+}
     
     public PowerUpTimerUI speedTimer;
     public PowerUpTimerUI shieldTimer;
@@ -180,6 +184,33 @@ public class ItemSlot : MonoBehaviour, IPointerClickHandler
         {
             PowerUpTimerUI.ShieldInstance.gameObject.SetActive(true);
             PowerUpTimerUI.ShieldInstance.StartTimer();
+        }
+    }
+    
+    
+    private void UseHeal()
+    {
+        // Find the health script on the player
+        BatteryHealthUI health = GameObject.FindGameObjectWithTag("Player").GetComponent<BatteryHealthUI>();
+
+        if (health != null)
+        {
+            // Heal for 1 or 2 segments
+            health.Heal(1); 
+        
+            // Remove the item from inventory
+            quantity--;
+
+            if (quantity <= 0)
+            {
+                ClearSlot();
+            }
+            else
+            {
+                quantityText.text = quantity.ToString();
+            }
+        
+            Debug.Log("Player has been healed!");
         }
     }
     

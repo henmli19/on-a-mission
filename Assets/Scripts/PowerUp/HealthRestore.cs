@@ -1,16 +1,27 @@
 using UnityEngine;
 
-public class HealthRestore : PowerUp
+public class HealthRestore : MonoBehaviour
 {
-    public float healthAmount = 2f; // zum Beispiel 2f, wuerde nach der Implementierung des Healths verandert.
+    public HealItem healItem;
+    public int quantity = 1;
 
-    protected override void ApplyPowerUp(GameObject player)
+    private void OnTriggerEnter2D(Collider2D other)
     {
-        Debug.Log($"Player restored {healthAmount} health!");
+        if (other.CompareTag("Player"))
+        {
+            InventoryManager im = GameObject.Find("InventoryCanvas").GetComponent<InventoryManager>();
 
-        // Es gibt kein Health im Spiel. Aber wenn es spaeter implementiert wurde, 
-        // wurden der Spieler Health bekommen mit etw. wie das:
-        // PlayerHealth health = player.GetComponent<PlayerHealth>();
-        // if (health != null) health.Heal(health Amount);
+            int leftover = im.AddItem(
+                healItem.itemName,
+                quantity,
+                healItem.itemSprite,
+                healItem.itemDescription
+            );
+
+            if (leftover <= 0)
+                Destroy(gameObject);
+            else
+                quantity = leftover; // keep remaining
+        }
     }
 }
