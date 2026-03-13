@@ -7,7 +7,8 @@ public class Item : MonoBehaviour
     [SerializeField] private Sprite sprite;
     [SerializeField] private int quantity;
     [TextArea] [SerializeField] private string itemDescription;
-    
+    [SerializeField] private AudioClip pickupSound;
+    [SerializeField] private AudioSource audioSource;
     private InventoryManager inventoryManager;
     
     // Start is called before the first frame update
@@ -19,7 +20,9 @@ public class Item : MonoBehaviour
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.tag == "Player")
+            
         {
+            audioSource.PlayOneShot(pickupSound);
             int leftOverItems = inventoryManager.AddItem(itemName, quantity, sprite, itemDescription);
             if (leftOverItems <= 0) Destroy(gameObject);
             else quantity = leftOverItems;

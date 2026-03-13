@@ -10,26 +10,26 @@ TagManager:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - Player
+  - 
   - Water
   - UI
+  - Layer7
+  - Player
+  - Layer8
+  - Layer6
+  - Layer5
+  - Layer4
+  - Layer3
+  - L2
+  - l1
+  - 
+  - 
+  - 
   - Ground
   - Laser
   - Minimap_PlayerDot
   - Minimap_EnemyDot
   - Minimap_NPC
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
   - 
   - 
   - 

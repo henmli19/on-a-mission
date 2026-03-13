@@ -19,6 +19,7 @@ namespace Player_Scripts
         [SerializeField] private float dashingTime = 0.2f;
         [SerializeField] private float dashCooldown = 1f;
         [SerializeField] private TrailRenderer dashTrail;
+        
 
         [Header("Ground Check Settings")] [SerializeField]
         private float groundCheckDistance = 0.1f; // length of raycast
@@ -31,6 +32,13 @@ namespace Player_Scripts
         [SerializeField] public bool inputEnabled = true;
         
         public bool isShielded = false;
+        
+        [Header("Sound Effects")]
+        [SerializeField] private AudioSource audioSource;
+        [SerializeField] private AudioClip jumpSound;
+        [SerializeField] private AudioClip dashSound;
+        [SerializeField] private AudioClip walkingSound;
+      
         
         void Start()
         {
@@ -88,6 +96,7 @@ namespace Player_Scripts
             if (horizontal != 0)
             {
                 _Animator.SetBool("isRunning", true);
+                audioSource.PlayOneShot(walkingSound);
             }
             else
             {
@@ -98,6 +107,7 @@ namespace Player_Scripts
                 transform.localScale = new Vector3(Mathf.Abs(transform.localScale.x), transform.localScale.y, transform.localScale.z);
             else if (horizontal < 0)
                 transform.localScale = new Vector3(-Mathf.Abs(transform.localScale.x), transform.localScale.y, transform.localScale.z); 
+           
         }
         
         void HandleJump()
@@ -106,6 +116,7 @@ namespace Player_Scripts
             {
                 rb.velocity = new Vector2(rb.velocity.x, jumpForce);
                 isGrounded = false;
+                audioSource.PlayOneShot(jumpSound);
             }
 
             if (isGrounded )
@@ -149,7 +160,7 @@ namespace Player_Scripts
             float originalGravity = rb.gravityScale;
             rb.gravityScale = 0f;
             float dashDirection = transform.localScale.x > 0 ? 1 : -1;
-            rb.velocity = new Vector2(dashDirection * dashingPower, 0f);
+            rb.velocity = new Vector2(dashDirection * dashingPower * Time.deltaTime, 0f);
             dashTrail.emitting = true;
             yield return new WaitForSeconds(dashingTime);
             dashTrail.emitting = false;
@@ -157,6 +168,7 @@ namespace Player_Scripts
             isDashing = false;
             yield return new WaitForSeconds(dashCooldown);
             canDash = true;
+            audioSource.PlayOneShot(dashSound);
         }
     
         private Coroutine speedBoostCoroutine;

@@ -3,6 +3,9 @@ using UnityEngine;
 
 public class Shooting : MonoBehaviour
 {
+  
+    [SerializeField] private AudioClip laserSound;
+    [SerializeField] private AudioSource audioSource;
     [SerializeField] private GameObject laserPrefab;
     [SerializeField] private Transform firePoint;
 
@@ -45,5 +48,6 @@ public class Shooting : MonoBehaviour
         {
             rb.velocity = direction * laserSpeed;
         }
+        audioSource.PlayOneShot(laserSound); // ADD THIS
     }
 }
