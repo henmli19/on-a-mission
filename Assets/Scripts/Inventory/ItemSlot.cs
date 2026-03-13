@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using Player_Scripts;
 using UnityEngine;
 using TMPro;
@@ -135,9 +136,17 @@ public class ItemSlot : MonoBehaviour, IPointerClickHandler
             quantityText.text = quantity.ToString();
         }
         
-        //UI Timer Bar
-        speedTimer.gameObject.SetActive(true);
-        speedTimer.StartTimer();
+        if (PowerUpTimerUI.SpeedInstance == null)
+        {
+            // Suche nach alle Objekte aktiv und inaktiv
+            PowerUpTimerUI.SpeedInstance = Resources.FindObjectsOfTypeAll<PowerUpTimerUI>().FirstOrDefault(t => !t.isShieldTimer);
+        }
+
+        if (PowerUpTimerUI.SpeedInstance != null)
+        {
+            PowerUpTimerUI.SpeedInstance.gameObject.SetActive(true);
+            PowerUpTimerUI.SpeedInstance.StartTimer();
+        }
     }
     
     private void UseShield()
@@ -161,10 +170,16 @@ public class ItemSlot : MonoBehaviour, IPointerClickHandler
             quantityText.text = quantity.ToString();
         }
 
-        if (shieldTimer != null)
+        if (PowerUpTimerUI.ShieldInstance == null)
         {
-            shieldTimer.gameObject.SetActive(true);
-            shieldTimer.StartTimer();
+            // Suche nach alle Objekte aktiv und inaktiv
+            PowerUpTimerUI.ShieldInstance = Resources.FindObjectsOfTypeAll<PowerUpTimerUI>().FirstOrDefault(t => t.isShieldTimer);
+        }
+
+        if (PowerUpTimerUI.ShieldInstance != null)
+        {
+            PowerUpTimerUI.ShieldInstance.gameObject.SetActive(true);
+            PowerUpTimerUI.ShieldInstance.StartTimer();
         }
     }
     
