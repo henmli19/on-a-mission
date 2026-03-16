@@ -15,7 +15,11 @@ public class Laser : MonoBehaviour
         {
             Destroy(collision.gameObject); 
             Destroy(gameObject);           
-        }
+        } else if (collision.CompareTag("Sphere"))
+        {
+            Destroy(collision.gameObject); 
+            Destroy(gameObject);           
+        } 
         else if (collision.CompareTag("Ground"))
         {
             Destroy(gameObject);          

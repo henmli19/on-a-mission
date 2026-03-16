@@ -20,7 +20,7 @@ public class PlayerData {
 
         inventory = new List<InventorySaveData>();
         
-        // Loop through slots and save anything that isn't empty
+        // Gehen durch die Slots der Inv 
         foreach (var slot in inv.itemSlot)
         {
             if (slot.quantity > 0)

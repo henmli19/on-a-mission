@@ -27,11 +27,17 @@ public class BatteryHealthUI : MonoBehaviour
         audioSource.PlayOneShot(damageSound);
         
     }
-    public void AddHealth(int amount)
+    public void Heal(int amount)
     {
         currentHealth += amount;
-        currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth);
-        UpdateUI();
+    
+        // Clamp the health so it doesn't go over the maximum
+        if (currentHealth > maxHealth) 
+        {
+            currentHealth = maxHealth;
+        }
+
+        UpdateUI(); // Make sure your bars/icons update!
     }
 
     private void UpdateUI()

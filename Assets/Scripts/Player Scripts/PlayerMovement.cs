@@ -48,10 +48,14 @@ namespace Player_Scripts
 
         void Update()
         {
-            if (isDashing)
+            
+            if (beingGrabbed)
             {
-                return;
+                HandleGrabSpam();
+                return; // Keine normale movements when grabbed
             }
+
+            if (isDashing) return;
             CheckGrounded();
 
 
@@ -203,6 +207,70 @@ namespace Player_Scripts
 
                 Destroy(other.gameObject);
             }
+        }
+        
+        //Grabbing Minigame for the Sphere Enemy
+        [Header("Grab Minigame")]
+        public GameObject grabMessageUI; // Assign your "SPAM A/D" Text in Inspector
+        private bool beingGrabbed = false;
+        private int currentSpamCount = 0;
+        private int requiredSpamCount = 10;
+        private KeyCode lastPressed = KeyCode.None;
+        private GameObject currentGrabber;
+        
+        public void StartGrabbingMinigame(int required, GameObject grabber)
+        {
+            beingGrabbed = true;
+            requiredSpamCount = required;
+            currentSpamCount = 0;
+            currentGrabber = grabber;
+    
+            if (grabMessageUI != null) 
+            {
+                grabMessageUI.SetActive(true);
+                // Debugging ...
+                Debug.Log("Minigame Started: UI should be visible now.");
+            }
+            else
+            {
+                Debug.LogError("GrabMessageUI is NOT assigned in the Inspector!");
+            }
+        }
+
+        public void StopGrabbingMinigame()
+        {
+            beingGrabbed = false;
+            if (grabMessageUI != null) grabMessageUI.SetActive(false);
+        }
+
+        private void HandleGrabSpam()
+        {
+            // Check for alternating A and D presses
+            if (Input.GetKeyDown(KeyCode.A) && lastPressed != KeyCode.A)
+            {
+                currentSpamCount++;
+                lastPressed = KeyCode.A;
+                transform.position += Vector3.left * 0.1f; // Visual shake
+            }
+            else if (Input.GetKeyDown(KeyCode.D) && lastPressed != KeyCode.D)
+            {
+                currentSpamCount++;
+                lastPressed = KeyCode.D;
+                transform.position += Vector3.right * 0.1f; // Visual shake
+            }
+
+            if (currentSpamCount >= requiredSpamCount)
+            {
+                if (currentGrabber != null)
+                {
+                    currentGrabber.GetComponent<SphereEnemy>().ReleasePlayer(this);
+                }
+            }
+        }
+        
+        public bool IsBeingGrabbed()
+        {
+            return beingGrabbed; //me i than Shooting.cs a jam Grabbed a ja
         }
     }
 }
