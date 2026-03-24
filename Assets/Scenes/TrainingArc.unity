@@ -2816,6 +2816,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   powerUpDuration: 10
   bars: []
+  isShieldTimer: 0
 --- !u!114 &485746782
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2835,6 +2836,7 @@ MonoBehaviour:
   - {fileID: 366437052}
   - {fileID: 1836776503}
   - {fileID: 1351443117}
+  isShieldTimer: 0
 --- !u!1 &493862310
 GameObject:
   m_ObjectHideFlags: 0
@@ -4266,6 +4268,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Drone
       objectReference: {fileID: 0}
+    - target: {fileID: 5837074803569545702, guid: 7574daf49413f9c4b8ce2c8f6bed6933, type: 3}
+      propertyPath: playerLayer.m_Bits
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7341478532879816991, guid: 7574daf49413f9c4b8ce2c8f6bed6933, type: 3}
       propertyPath: m_Size.x
       value: 41.37863
@@ -5217,6 +5223,7 @@ MonoBehaviour:
   - {fileID: 833818526}
   - {fileID: 157905412}
   - {fileID: 387632786}
+  isShieldTimer: 0
 --- !u!1 &944896207
 GameObject:
   m_ObjectHideFlags: 0
