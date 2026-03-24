@@ -5,14 +5,12 @@ using UnityEngine.UI;
 using PrimeTween;
 public class Cards_Script : MonoBehaviour {
 
-    [SerializeField] private Image iconImage;   // UI Image component displaying the sprite
+    [SerializeField] private Image iconImage;// UI Image component displaying the sprite
+    public Sprite hiddenIconSprite;// Back side of the card
+    public Sprite iconSprite;// Front side sprite
 
-    public Sprite hiddenIconSprite;             // Back side of the card
-    public Sprite iconSprite;                   // Front side sprite
-
-    public bool isSelected;                     // Indicates whether card is currently revealed
-
-    public CardController Controller;           // Reference to main controller
+    public bool isSelected;// Indicates whether card is currently revealed
+    public CardController Controller;// Reference to main controller
 
     public void OnCardClick() {
         // Forward click event to controller (centralized logic)
@@ -60,7 +58,7 @@ public class Cards_Script : MonoBehaviour {
         // Rotate to simulate flip animation
         Tween.Rotation(transform, new Vector3(0f, 180f, 0f), 0.2f);
 
-        // Change sprite midway through animation
+        // Change sprite through animation
         Tween.Delay(0.1f, () => iconImage.sprite = iconSprite);
 
         isSelected = true;

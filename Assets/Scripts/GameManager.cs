@@ -20,7 +20,7 @@ public class GameManager : MonoBehaviour {
   private List<double> reactionTimes = new();
 
   public void StartGame() {
-    // Hide any UI elements we don't want.
+    // Hide any UI elements we don't want
     playButton.SetActive(false);
     scoreText.gameObject.SetActive(false);
 
@@ -46,24 +46,24 @@ public class GameManager : MonoBehaviour {
   }
 
   public void TargetHit() {
-    // Record the reaction time.
+    // Records the reaction time
     reactionTimes.Add(Time.unscaledTimeAsDouble - showTime);
 
-    // Hide the target
+    // Hides the target
     target.SetActive(false);
 
-    // If we've still got rounds left, start the next one.
+    // If there are still rounds left, starts the next one
     if (reactionTimes.Count < numRounds) {
       StartCoroutine(PlayRound());
     } else {
-      // Calculate the reaction time score.
+      // Calculates the reaction time score
       double average = (reactionTimes.Sum() - reactionTimes.Min() - reactionTimes.Max()) / (numRounds - 2);
       int milliseconds = (int)(average * 1000);
 
-      // Show the UI.
+      // Shows the UI
       playButton.SetActive(true);
 
-      // Update the score and show.
+      // Updates the score 
       string scoreType;
       if (milliseconds < 500) {
         scoreType = "Outrageous";
@@ -78,7 +78,7 @@ public class GameManager : MonoBehaviour {
       scoreText.text = $"{scoreType} score: {milliseconds}ms";
       scoreText.gameObject.SetActive(true);
 
-      // Record the results.
+      // Records the results in milliseconds
       foreach (double reactionTime in reactionTimes) { 
         Debug.Log(reactionTime);
       }
