@@ -18,16 +18,25 @@ public class LaserProjectile : MonoBehaviour
         direction = dir.normalized;
         speed = spd;
 
-        // Calculate the angle toward the player
-        // Mathf.Atan2 returns the angle in radians, Rad2Deg converts it to 0-360 degrees
         float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-
-        // Apply the rotation to the laser
         transform.rotation = Quaternion.Euler(0, 0, angle);
     }
 
     void Update()
     {
         transform.Translate(direction * (speed * Time.deltaTime), Space.World);
+    }
+
+    // This is what was missing — actually deal damage on hit
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            BatteryHealthUI health = other.GetComponent<BatteryHealthUI>();
+            if (health != null)
+                health.TakeDamage(damage);
+
+            Destroy(gameObject);
+        }
     }
 }
