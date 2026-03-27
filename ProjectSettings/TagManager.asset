@@ -6,11 +6,13 @@ TagManager:
   tags:
   - Ground
   - Enemy
+  - Sphere
+  - Boss
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Boss
   - Water
   - UI
   - Layer7

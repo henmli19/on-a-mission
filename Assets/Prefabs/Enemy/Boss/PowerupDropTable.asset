@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 32e9c029a0dbeeb4594206b0dd91937d, type: 3}
+  m_Name: PowerupDropTable
+  m_EditorClassIdentifier: 
+  entries:
+  - prefab: {fileID: 3068101707693308340, guid: 3f6226563e50a574abe1b10bca6b8ba0, type: 3}
+    weight: 2
+  - prefab: {fileID: 7334564065073119854, guid: f9d7e76f7c8f5de4ba74e3052c5b10dd, type: 3}
+    weight: 1
+  - prefab: {fileID: 2066872287112416055, guid: 0ff58de766889a349a48f3d77603c30d, type: 3}
+    weight: 1
