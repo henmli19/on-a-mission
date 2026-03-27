@@ -17,4 +17,13 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/TrainingArc.unity
     guid: 90abfc7dda5eb884aa962c271a1b7381
+  - enabled: 1
+    path: Assets/Scenes/LEVEL3Andrea.unity
+    guid: 3a9153c32580fcc45851224cc53fde64
+  - enabled: 1
+    path: Assets/Scenes/Level4Andrea.unity
+    guid: 1313b1caf03335d458030cdb7cc235e5
+  - enabled: 1
+    path: Assets/Scenes/Level3BossFix.unity
+    guid: d8139b72ff53dbb4e8afc6bfd37e7a20
   m_configObjects: {}
