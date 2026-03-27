@@ -56,15 +56,23 @@ public class BossEnemy : Enemy
     public float teleportCooldown = 8f;
     [Tooltip("How far from the player the boss reappears")]
     public float teleportRange = 3f;
+    [Tooltip("Boss always teleports to this Y position")]
+    public float teleportY = 7.1192f;
+    [Tooltip("If player gets closer than this, boss teleports away")]
+    public float backawayDistance = 2f;
     [Tooltip("Optional puff/flash effect spawned on vanish and arrival")]
     public GameObject teleportVFXPrefab;
     private float nextTeleportTime;
-    public float backawayDistance = 3f; // if player gets closer than this, boss teleports away
 
     // ── State ─────────────────────────────────
     private enum BossState { Idle, Chasing, Summoning, Slashing, Bursting, Teleporting }
     private BossState currentState = BossState.Idle;
+
+    // isActing  — locks out normal move selection (summon, slash, burst, teleport)
+    // isBackingAway — separate lock just for the backaway teleport so it never
+    //                 conflicts with isActing used by SummonMinions
     private bool isActing = false;
+    private bool isBackingAway = false;
 
     // ── Boss Health Bar ────────────────────────
     private BossHealthBar bossHealthBar;
@@ -89,7 +97,6 @@ public class BossEnemy : Enemy
         if (bossHealthBar != null)
             bossHealthBar.SetMaxHealth(maxHealth);
 
-        // Boost base move speed right from the start
         moveSpeed *= 1.4f;
 
         nextSummonTime   = Time.time + summonCooldown * 0.5f;
@@ -103,20 +110,21 @@ public class BossEnemy : Enemy
     {
         if (isDead || player == null) return;
 
-        // Always face the player regardless of what the boss is doing
+        // Always face the player
         FacePlayer();
 
-        // If summoning and player gets too close, teleport to the other side
-        if (currentState == BossState.Summoning && player != null)
+        // Backaway teleport uses its own lock so it never conflicts
+        // with isActing used by SummonMinions / other moves
+        if (!isBackingAway)
         {
-            float distance = Vector2.Distance(transform.position, player.position);
-            if (distance < backawayDistance && !isActing)
+            float distCheck = Vector2.Distance(transform.position, player.position);
+            if (distCheck < backawayDistance)
             {
                 StartCoroutine(BackawayTeleport());
                 return;
             }
         }
-        
+
         if (isActing) return;
 
         // Check enrage
@@ -125,16 +133,14 @@ public class BossEnemy : Enemy
 
         float dist = Vector2.Distance(transform.position, player.position);
 
-        // ── Priority order ──────────────────
-
-        // 1. Summon — only if no minions are currently alive
+        // 1. Summon
         if (Time.time >= nextSummonTime && trackedMinions.Count == 0)
         {
             StartCoroutine(SummonMinions());
             return;
         }
 
-        // 2. Teleport — medium range, before slash
+        // 2. Teleport — medium range
         if (dist <= detectionRange && dist > slashRange && Time.time >= nextTeleportTime)
         {
             StartCoroutine(TeleportAroundPlayer());
@@ -148,7 +154,7 @@ public class BossEnemy : Enemy
             return;
         }
 
-        // 4. Radial Burst — medium range
+        // 4. Radial Burst
         if (dist <= detectionRange && Time.time >= nextBurstTime)
         {
             StartCoroutine(RadialBurst());
@@ -166,7 +172,7 @@ public class BossEnemy : Enemy
     private void FacePlayer()
     {
         if (sr == null || player == null) return;
-        sr.flipX = player.position.x > transform.position.x; // was <, now >
+        sr.flipX = player.position.x > transform.position.x;
     }
 
     // ─────────────────────────────────────────
@@ -201,17 +207,16 @@ public class BossEnemy : Enemy
             if (prefab == null) continue;
 
             GameObject minion = Instantiate(prefab, spawnPoint.position, Quaternion.identity);
-
-            // Track this minion — drop is handled by WatchMinions()
             trackedMinions[minion] = spawnPoint.position;
 
             yield return new WaitForSeconds(0.15f);
         }
 
-        // Watch for minion deaths in the background
         StartCoroutine(WatchMinions());
 
-        // Wait until all minions are dead before unlocking boss actions
+        // Wait until all minions are dead
+        // Note: BackawayTeleport uses isBackingAway, NOT isActing,
+        // so it can still fire here without ever touching this flag
         yield return new WaitUntil(() => trackedMinions.Count == 0);
 
         currentState = BossState.Idle;
@@ -220,28 +225,22 @@ public class BossEnemy : Enemy
 
     // ─────────────────────────────────────────
     //  Minion Death Watcher
-    //  Tracks each minion's position every frame.
-    //  The moment one goes null it spawns the drop.
     // ─────────────────────────────────────────
     private IEnumerator WatchMinions()
     {
         while (trackedMinions.Count > 0)
         {
-            // Copy keys into a separate list so we can safely
-            // modify the dictionary while iterating
             List<GameObject> keys = new List<GameObject>(trackedMinions.Keys);
 
             foreach (GameObject minion in keys)
             {
                 if (minion == null)
                 {
-                    // Minion just died — spawn drop at last recorded position
                     SpawnDrop(trackedMinions[minion]);
                     trackedMinions.Remove(minion);
                 }
                 else
                 {
-                    // Still alive — update last known position
                     trackedMinions[minion] = minion.transform.position;
                 }
             }
@@ -262,7 +261,6 @@ public class BossEnemy : Enemy
         GameObject drop = powerupDropTable.GetRandomDrop();
         if (drop != null)
         {
-            // Always spawn at Y = 3, keep the minion's X position
             Vector2 dropPosition = new Vector2(position.x, 3f);
             Instantiate(drop, dropPosition, Quaternion.identity);
             Debug.Log("Powerup dropped at " + dropPosition);
@@ -358,7 +356,7 @@ public class BossEnemy : Enemy
             float angle      = i * step + angleOffset;
             float rad        = angle * Mathf.Deg2Rad;
             Vector2 dir      = new Vector2(Mathf.Cos(rad), Mathf.Sin(rad));
-            Vector2 spawnPos = origin + dir * 2.5f; // spread bullets far apart
+            Vector2 spawnPos = origin + dir * 2.5f;
 
             GameObject bullet = Instantiate(bossBulletPrefab, spawnPos, Quaternion.identity);
             LaserProjectile proj = bullet.GetComponent<LaserProjectile>();
@@ -376,50 +374,52 @@ public class BossEnemy : Enemy
         currentState = BossState.Teleporting;
         nextTeleportTime = Time.time + teleportCooldown;
 
-        // Spawn VFX at current position before vanishing
         if (teleportVFXPrefab != null)
             Instantiate(teleportVFXPrefab, transform.position, Quaternion.identity);
 
-        // Hide the boss visually
         if (sr != null) sr.enabled = false;
 
         yield return new WaitForSeconds(0.4f);
 
-        // Pick a random position around the player
         Vector2[] offsets = new Vector2[]
         {
             new Vector2(-teleportRange, 0),
             new Vector2( teleportRange, 0),
-            new Vector2(-teleportRange * 0.7f,  teleportRange * 0.7f),
-            new Vector2( teleportRange * 0.7f,  teleportRange * 0.7f),
+            new Vector2(-teleportRange * 0.7f, 0),
+            new Vector2( teleportRange * 0.7f, 0),
         };
 
-        Vector2 chosenOffset   = offsets[Random.Range(0, offsets.Length)];
-        Vector2 teleportTarget = (Vector2)player.position + chosenOffset;
+        Vector2 chosenOffset = offsets[Random.Range(0, offsets.Length)];
+        Vector2 teleportTarget = new Vector2(
+            player.position.x + chosenOffset.x,
+            teleportY
+        );
 
         transform.position = teleportTarget;
 
-        // Spawn VFX at new position on arrival
         if (teleportVFXPrefab != null)
             Instantiate(teleportVFXPrefab, transform.position, Quaternion.identity);
 
-        // Reappear
         if (sr != null) sr.enabled = true;
 
-        // Brief pause so player can react before the follow-up slash
         yield return new WaitForSeconds(0.15f);
 
         currentState = BossState.Idle;
         isActing = false;
 
-        // Immediately follow up with a slash if close enough
         if (Vector2.Distance(transform.position, player.position) <= slashRange * 1.5f)
             StartCoroutine(SwordSlash());
     }
-    
+
+    // ─────────────────────────────────────────
+    //  Backaway Teleport
+    //  Uses isBackingAway instead of isActing so
+    //  it NEVER conflicts with SummonMinions or
+    //  any other move that uses isActing.
+    // ─────────────────────────────────────────
     private IEnumerator BackawayTeleport()
     {
-        isActing = true;
+        isBackingAway = true;
 
         if (teleportVFXPrefab != null)
             Instantiate(teleportVFXPrefab, transform.position, Quaternion.identity);
@@ -428,9 +428,11 @@ public class BossEnemy : Enemy
 
         yield return new WaitForSeconds(0.25f);
 
-        // Teleport to the opposite side of the player from where the boss currently is
         Vector2 directionFromPlayer = ((Vector2)transform.position - (Vector2)player.position).normalized;
-        Vector2 oppositePos = (Vector2)player.position - directionFromPlayer * teleportRange;
+        Vector2 oppositePos = new Vector2(
+            player.position.x - directionFromPlayer.x * teleportRange,
+            teleportY
+        );
 
         transform.position = oppositePos;
 
@@ -439,14 +441,13 @@ public class BossEnemy : Enemy
 
         if (sr != null) sr.enabled = true;
 
-        yield return new WaitForSeconds(0.1f);
+        yield return new WaitForSeconds(0.3f); // small cooldown before it can fire again
 
-        isActing = false;
-        currentState = BossState.Summoning; // go back to waiting for minions
+        isBackingAway = false;
     }
 
     // ─────────────────────────────────────────
-    //  Enrage — faster + shorter cooldowns
+    //  Enrage
     // ─────────────────────────────────────────
     private void TriggerEnrage()
     {
@@ -455,7 +456,7 @@ public class BossEnemy : Enemy
         slashCooldown    *= 0.6f;
         burstCooldown    *= 0.6f;
         summonCooldown   *= 0.7f;
-        teleportCooldown *= 0.7f; // teleports more frequently when enraged
+        teleportCooldown *= 0.7f;
         burstWaves++;
 
         Debug.Log("Boss ENRAGED!");
@@ -478,7 +479,6 @@ public class BossEnemy : Enemy
         if (bossHealthBar != null)
             bossHealthBar.HideBar();
 
-        // Kill all remaining tracked minions
         foreach (var entry in trackedMinions)
             if (entry.Key != null) Destroy(entry.Key);
 
@@ -503,5 +503,7 @@ public class BossEnemy : Enemy
         Gizmos.DrawWireSphere(transform.position, attackRange);
         Gizmos.color = Color.magenta;
         Gizmos.DrawWireSphere(transform.position, teleportRange);
+        Gizmos.color = Color.white;
+        Gizmos.DrawWireSphere(transform.position, backawayDistance);
     }
 }
