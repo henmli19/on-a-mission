@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.Playables;
+using UnityEngine.SceneManagement;
 
 public class NPCCutscene : MonoBehaviour
 {
@@ -7,11 +8,14 @@ public class NPCCutscene : MonoBehaviour
 
     private bool playerNearby = false;
     public GameObject Canvas;
+    public string nextSceneName; 
 
     void Start()
     {
         Canvas.SetActive(false);
+        cutscene.stopped += OnCutsceneFinished;
     }
+
     void Update()
     {
         if (playerNearby && Input.GetKeyDown(KeyCode.E))
@@ -20,6 +24,12 @@ public class NPCCutscene : MonoBehaviour
             Canvas.SetActive(true);   
         }
     }
+
+    void OnCutsceneFinished(PlayableDirector pd)
+    {
+        SceneManager.LoadScene(nextSceneName);
+    }
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.CompareTag("Player"))
@@ -27,6 +37,7 @@ public class NPCCutscene : MonoBehaviour
             playerNearby = true;
         }
     }
+
     private void OnTriggerExit2D(Collider2D collision)
     {
         if (collision.CompareTag("Player"))
