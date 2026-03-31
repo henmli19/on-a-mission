@@ -123,6 +123,11 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &190628553 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6933366119827515665, guid: bdcb9a205f0fe5e4185a2abbef4071cc, type: 3}
+  m_PrefabInstance: {fileID: 172664095289734045}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &584184220
 GameObject:
   m_ObjectHideFlags: 0
@@ -336,6 +341,62 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 3385082564461686369, guid: bdcb9a205f0fe5e4185a2abbef4071cc, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 1aa4fc0bb2f691042a2a3f8598937619, type: 3}
+    - target: {fileID: 3824877158753998498, guid: bdcb9a205f0fe5e4185a2abbef4071cc, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -5.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 3865879338846392195, guid: bdcb9a205f0fe5e4185a2abbef4071cc, type: 3}
+      propertyPath: pausePanel
+      value: 
+      objectReference: {fileID: 190628553}
+    - target: {fileID: 4443367185987863748, guid: bdcb9a205f0fe5e4185a2abbef4071cc, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: GoHome
+      objectReference: {fileID: 0}
+    - target: {fileID: 5926702455131201734, guid: bdcb9a205f0fe5e4185a2abbef4071cc, type: 3}
+      propertyPath: m_Pivot.y
+      value: 0.49999997
+      objectReference: {fileID: 0}
+    - target: {fileID: 5926702455131201734, guid: bdcb9a205f0fe5e4185a2abbef4071cc, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 379.6021
+      objectReference: {fileID: 0}
+    - target: {fileID: 5926702455131201734, guid: bdcb9a205f0fe5e4185a2abbef4071cc, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 267.8568
+      objectReference: {fileID: 0}
+    - target: {fileID: 5926702455131201734, guid: bdcb9a205f0fe5e4185a2abbef4071cc, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 85.59148
+      objectReference: {fileID: 0}
+    - target: {fileID: 5926702455131201734, guid: bdcb9a205f0fe5e4185a2abbef4071cc, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -0.19145918
+      objectReference: {fileID: 0}
+    - target: {fileID: 5926702455131201734, guid: bdcb9a205f0fe5e4185a2abbef4071cc, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -39.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6958807857378940690, guid: bdcb9a205f0fe5e4185a2abbef4071cc, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 347.8568
+      objectReference: {fileID: 0}
+    - target: {fileID: 6958807857378940690, guid: bdcb9a205f0fe5e4185a2abbef4071cc, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 248.0159
+      objectReference: {fileID: 0}
+    - target: {fileID: 6958807857378940690, guid: bdcb9a205f0fe5e4185a2abbef4071cc, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -23.291458
+      objectReference: {fileID: 0}
+    - target: {fileID: 6958807857378940690, guid: bdcb9a205f0fe5e4185a2abbef4071cc, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -39.4
+      objectReference: {fileID: 0}
     - target: {fileID: 7256797872109051316, guid: bdcb9a205f0fe5e4185a2abbef4071cc, type: 3}
       propertyPath: m_Camera
       value: 
@@ -383,6 +444,18 @@ PrefabInstance:
     - target: {fileID: 8593328871052578810, guid: bdcb9a205f0fe5e4185a2abbef4071cc, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8609986223132992864, guid: bdcb9a205f0fe5e4185a2abbef4071cc, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: d6b2aa7b86d54494d832acad1c57df34, type: 3}
+    - target: {fileID: 9220061244163144350, guid: bdcb9a205f0fe5e4185a2abbef4071cc, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -10.091459
+      objectReference: {fileID: 0}
+    - target: {fileID: 9220061244163144350, guid: bdcb9a205f0fe5e4185a2abbef4071cc, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -17.6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

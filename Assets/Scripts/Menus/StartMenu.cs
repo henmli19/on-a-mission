@@ -4,6 +4,10 @@ using UnityEngine.SceneManagement;
 public class StartMenu : MonoBehaviour
 {
     
+    public GameObject settingsPanel;
+    public GameObject settingsPanel1;
+
+    
     public void StartGame()
     {
         SceneManager.LoadScene("TheBunkerScene");
@@ -16,7 +20,9 @@ public class StartMenu : MonoBehaviour
 
     public void OpenSettings()
     {
-        SceneManager.LoadScene("Settings");
+        settingsPanel.SetActive(!settingsPanel.activeSelf);
+        settingsPanel1.SetActive(!settingsPanel1.activeSelf);
+
     }
 
     public void QuitGame()

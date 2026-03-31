@@ -3,41 +3,34 @@ using UnityEngine.SceneManagement;
 
 public class PauseMenu : MonoBehaviour
 {
-    public GameObject pauseMenu;
-    public static bool GameIsPaused = false;
+    public GameObject pausePanel;
 
-    void Start()
-    {
-        
-        pauseMenu.SetActive(false);
-        Time.timeScale = 1f;
-        GameIsPaused = false;
-    }
+    private bool isPaused = false;
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.P))
-        { 
-			Debug.Log("P pressed.");
-            Pause();
-}
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            if (isPaused)
+                Resume();
+            else
+                Pause();
+        }
+    }
+
+    // ⏸ Pause game
+    void Pause()
+    {
+        pausePanel.SetActive(true);
+        Time.timeScale = 0f;
+        isPaused = true;
     }
 
     public void Resume()
     {
-        
-        GameIsPaused = false;
-        pauseMenu.SetActive(false);
+        pausePanel.SetActive(false);
         Time.timeScale = 1f;
-       Debug.Log("resume");
-    }
-
-    void Pause()
-    {
-        pauseMenu.SetActive(true);
-        Time.timeScale = 0f;
-        GameIsPaused = true;
-Debug.Log("pause");
+        isPaused = false;
     }
 
     public void Restart()
@@ -46,9 +39,9 @@ Debug.Log("pause");
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
-    public void ExitGame()
+    public void GoHome()
     {
-        Application.Quit(); 
-        Debug.Log("Game exited");
+        Time.timeScale = 1f;
+        SceneManager.LoadScene("MainMenu"); // make sure this name matches exactly
     }
 }
