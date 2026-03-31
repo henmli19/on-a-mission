@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class ParallaxLayerClean : MonoBehaviour
+public class ParallaxLayer : MonoBehaviour
 {
     [Range(0f, 1f)]
     public float parallaxFactor = 0.5f;
@@ -10,18 +10,23 @@ public class ParallaxLayerClean : MonoBehaviour
 
     private GameObject[] tiles = new GameObject[3];
 
+    private int centerIndex = 0;
+
     void Start()
     {
         cam = Camera.main.transform;
 
         SpriteRenderer sr = GetComponent<SpriteRenderer>();
 
-        // 🔥 IMPORTANT: use LOCAL width (ignores parent scaling issues)
+        // local width (important for scaled parents)
         spriteWidth = sr.sprite.bounds.size.x;
 
         tiles[0] = gameObject;
         tiles[1] = CreateCopy();
         tiles[2] = CreateCopy();
+
+        // initial placement
+        UpdateTiles();
     }
 
     GameObject CreateCopy()
@@ -29,11 +34,9 @@ public class ParallaxLayerClean : MonoBehaviour
         GameObject copy = Instantiate(gameObject);
 
         copy.transform.SetParent(transform.parent);
-
-        // keep EXACT same local scale
         copy.transform.localScale = transform.localScale;
 
-        Destroy(copy.GetComponent<ParallaxLayerClean>());
+        Destroy(copy.GetComponent<ParallaxLayer>());
 
         return copy;
     }
@@ -42,11 +45,27 @@ public class ParallaxLayerClean : MonoBehaviour
     {
         float camX = cam.position.x * parallaxFactor;
 
-        // convert camera position into LOCAL space of parent
-        float localCamX = transform.parent.InverseTransformPoint(new Vector3(camX, 0, 0)).x;
+        float localCamX = transform.parent.InverseTransformPoint(
+            new Vector3(camX, 0, 0)
+        ).x;
 
-        int centerIndex = Mathf.RoundToInt(localCamX / spriteWidth);
+        // Handle RIGHT movement
+        while (localCamX > (centerIndex + 1) * spriteWidth)
+        {
+            centerIndex++;
+            UpdateTiles();
+        }
 
+        // Handle LEFT movement
+        while (localCamX < (centerIndex - 1) * spriteWidth)
+        {
+            centerIndex--;
+            UpdateTiles();
+        }
+    }
+
+    void UpdateTiles()
+    {
         for (int i = 0; i < 3; i++)
         {
             float xPos = (centerIndex + i - 1) * spriteWidth;
@@ -59,8 +78,3 @@ public class ParallaxLayerClean : MonoBehaviour
         }
     }
 }
-
-
-
-
-
