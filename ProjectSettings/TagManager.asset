@@ -24,9 +24,9 @@ TagManager:
   - Layer3
   - L2
   - l1
-  - 
-  - 
-  - 
+  - EnergyCore
+  - HoldPoint
+  - Interactable
   - Ground
   - Laser
   - Minimap_PlayerDot
