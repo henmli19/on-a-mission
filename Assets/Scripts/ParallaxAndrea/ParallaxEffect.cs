@@ -45,9 +45,13 @@ public class ParallaxLayer : MonoBehaviour
     {
         float camX = cam.position.x * parallaxFactor;
 
-        float localCamX = transform.parent.InverseTransformPoint(
-            new Vector3(camX, 0, 0)
-        ).x;
+        float localCamX;
+
+        // If there's no parent, just use world space directly
+        if (transform.parent != null)
+            localCamX = transform.parent.InverseTransformPoint(new Vector3(camX, 0, 0)).x;
+        else
+            localCamX = camX;
 
         // Handle RIGHT movement
         while (localCamX > (centerIndex + 1) * spriteWidth)
