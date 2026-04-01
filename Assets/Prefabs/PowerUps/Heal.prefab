@@ -13,9 +13,9 @@ GameObject:
   - component: {fileID: 7271862978867741769}
   - component: {fileID: 1214379968796192520}
   - component: {fileID: 8389162737251861063}
-  m_Layer: 6
+  m_Layer: 15
   m_Name: Heal
-  m_TagString: Untagged
+  m_TagString: Powerups
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

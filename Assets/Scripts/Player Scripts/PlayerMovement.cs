@@ -38,6 +38,7 @@ namespace Player_Scripts
         [SerializeField] private AudioClip jumpSound;
         [SerializeField] private AudioClip dashSound;
         [SerializeField] private AudioClip walkingSound;
+        [SerializeField] private AudioClip pickupSound;
       
         
         void Start()
@@ -97,6 +98,7 @@ namespace Player_Scripts
             else
             {
                 _Animator.SetBool("isRunning", false);
+                audioSource.Stop();
             }
 
             if (horizontal > 0)
@@ -152,7 +154,7 @@ namespace Player_Scripts
             float originalGravity = rb.gravityScale;
             rb.gravityScale = 0f;
             float dashDirection = transform.localScale.x > 0 ? 1 : -1;
-            rb.velocity = new Vector2(dashDirection * dashingPower * Time.deltaTime, 0f);
+            rb.velocity = new Vector2(dashDirection * dashingPower, 0f);
             dashTrail.emitting = true;
             yield return new WaitForSeconds(dashingTime);
             dashTrail.emitting = false;
@@ -195,8 +197,23 @@ namespace Player_Scripts
                 {
                     health.TakeDamage(1);
                 }
-
+                
                 Destroy(other.gameObject);
+            }
+            if (other.CompareTag("drone2"))
+            {
+                BatteryHealthUI health = GetComponent<BatteryHealthUI>();
+
+                if (health != null && isShielded == false)
+                {
+                    health.TakeDamage(1);
+                }
+                
+              
+            }
+            if (other.CompareTag("Powerups"))
+            {
+                audioSource.PlayOneShot(pickupSound);
             }
         }
         

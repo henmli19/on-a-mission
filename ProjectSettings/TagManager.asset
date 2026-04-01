@@ -8,6 +8,8 @@ TagManager:
   - Enemy
   - Sphere
   - Boss
+  - drone2
+  - Powerups
   layers:
   - Default
   - TransparentFX
@@ -24,7 +26,7 @@ TagManager:
   - Layer3
   - L2
   - l1
-  - 
+  - Powerups
   - 
   - 
   - Ground
