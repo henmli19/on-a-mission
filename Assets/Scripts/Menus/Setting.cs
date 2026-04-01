@@ -19,6 +19,7 @@ public class Setting : MonoBehaviour
 
     [Header("Panel")]
     public GameObject settingsPanel;
+    public GameObject pausePanel;
 
     private const string VolumeKey = "GameVolume";
 
@@ -63,10 +64,12 @@ public class Setting : MonoBehaviour
 
     void ResumeGame()
     {
-        if (settingsPanel != null)
+        if (settingsPanel != null){
             settingsPanel.SetActive(false);
+            pausePanel.SetActive(true);}
 
-        Time.timeScale = 1f; // resume game
+
+        
     }
 
 }
