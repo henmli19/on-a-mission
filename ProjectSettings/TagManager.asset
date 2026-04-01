@@ -8,6 +8,9 @@ TagManager:
   - Enemy
   - Sphere
   - Boss
+  - drone2
+  - Powerups
+  - border
   layers:
   - Default
   - TransparentFX
@@ -32,7 +35,7 @@ TagManager:
   - Minimap_PlayerDot
   - Minimap_EnemyDot
   - Minimap_NPC
-  - 
+  - npc
   - 
   - 
   - 
@@ -44,4 +47,13 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Background
+    uniqueID: 2204068297
+    locked: 0
+  - name: Interactable
+    uniqueID: 1596734803
+    locked: 0
+  - name: Player
+    uniqueID: 1807018013
     locked: 0

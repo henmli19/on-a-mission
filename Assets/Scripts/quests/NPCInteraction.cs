@@ -1,68 +1,119 @@
-// NPCInteraction.cs
 using UnityEngine;
+using UnityEngine.Playables;
+using UnityEngine.SceneManagement;
 
-public class NPCInteraction : MonoBehaviour
+public class NPCQuestDialogue : MonoBehaviour
 {
-    [Header("Einstellungen")]
-    [SerializeField] private float interactionRadius = 2f;
-    [SerializeField] private KeyCode interactKey = KeyCode.E;
+    [Header("Timelines")]
+    public PlayableDirector introTimeline;
+    public PlayableDirector returnWithItemTimeline;
+    public PlayableDirector returnWithoutItemTimeline;
 
-    private bool playerInRange = false;
-    private InventoryManager inventoryManager;
+    [Header("Canvases")]
+    public GameObject firstTimeCanvas;
+    public GameObject withItemCanvas;
+    public GameObject withoutItemCanvas;
 
-    private void Start()
+    [Header("Settings")]
+    public string requiredItemName = "Energy Core";
+    public string nextSceneName;
+
+    private bool playerNearby = false;
+    private bool isPlaying = false;
+
+    void Start()
     {
-        inventoryManager = GameObject.Find("InventoryCanvas").GetComponent<InventoryManager>();
-        QuestManager.Instance.StartEnergyQuest();
+        firstTimeCanvas.SetActive(false);
+        withItemCanvas.SetActive(false);
+        withoutItemCanvas.SetActive(false);
+
+        introTimeline.stopped += OnCutsceneFinished;
+        returnWithItemTimeline.stopped += OnCutsceneFinished;
+        returnWithoutItemTimeline.stopped += OnCutsceneFinished;
     }
 
-    private void Update()
+    void Update()
     {
-        GameObject player = GameObject.FindGameObjectWithTag("Player");
-        if (player == null) return;
-
-        float distance = Vector2.Distance(transform.position, player.transform.position);
-        playerInRange = distance <= interactionRadius;
-
-        if (playerInRange && Input.GetKeyDown(interactKey))
+        if (playerNearby && Input.GetKeyDown(KeyCode.E) && !isPlaying)
         {
-            Interact();
+            PlayCorrectTimeline();
         }
     }
 
-    private void Interact()
+    void PlayCorrectTimeline()
     {
-        if (QuestManager.Instance.energyCoreQuestState == QuestManager.QuestState.NotStarted)
+        QuestManager qm = QuestManager.Instance;
+
+        if (qm.energyCoreQuestState == QuestManager.QuestState.NotStarted)
+        {
+            qm.StartEnergyQuest();
+            isPlaying = true;
+            firstTimeCanvas.SetActive(true);
+            introTimeline.Play();
             return;
+        }
 
-        if (QuestManager.Instance.energyCoreQuestState == QuestManager.QuestState.Completed)
-            return;
-
-        ItemSlot energyCoreSlot = FindEnergyCore();
-
-        if (energyCoreSlot != null)
+        if (qm.energyCoreQuestState == QuestManager.QuestState.Active)
         {
-            energyCoreSlot.quantity--;
-            if (energyCoreSlot.quantity <= 0)
-                energyCoreSlot.ClearSlot();
-
-            QuestManager.Instance.CompleteEnergyQuest();
+            if (PlayerHasItem())
+            {
+                qm.CompleteEnergyQuest();
+                isPlaying = true;
+                withItemCanvas.SetActive(true);
+                returnWithItemTimeline.Play();
+            }
+            else
+            {
+                isPlaying = true;
+                withoutItemCanvas.SetActive(true);
+                returnWithoutItemTimeline.Play();
+            }
         }
     }
 
-    private ItemSlot FindEnergyCore()
+    void OnCutsceneFinished(PlayableDirector pd)
     {
-        foreach (ItemSlot slot in inventoryManager.itemSlot)
+        firstTimeCanvas.SetActive(false);
+        withItemCanvas.SetActive(false);
+        withoutItemCanvas.SetActive(false);
+        isPlaying = false;
+
+        // If the timeline that just finished was the "with item" one, load next scene
+        if (pd == returnWithItemTimeline)
         {
-            if (slot.itemName == "Energy Core" && slot.quantity > 0)
-                return slot;
+            SceneManager.LoadScene(nextSceneName);
         }
-        return null;
     }
 
-    private void OnDrawGizmosSelected()
+    private bool PlayerHasItem()
     {
-        Gizmos.color = Color.yellow;
-        Gizmos.DrawWireSphere(transform.position, interactionRadius);
+        InventoryManager im = GameObject.Find("InventoryCanvas").GetComponent<InventoryManager>();
+        if (im == null) return false;
+
+        foreach (ItemSlot slot in im.itemSlot)
+        {
+            if (slot.itemName == requiredItemName && slot.quantity > 0)
+                return true;
+        }
+        return false;
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Player"))
+            playerNearby = true;
+    }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Player"))
+            playerNearby = false;
+    }
+
+    void OnDestroy()
+    {
+        introTimeline.stopped -= OnCutsceneFinished;
+        returnWithItemTimeline.stopped -= OnCutsceneFinished;
+        returnWithoutItemTimeline.stopped -= OnCutsceneFinished;
     }
 }
