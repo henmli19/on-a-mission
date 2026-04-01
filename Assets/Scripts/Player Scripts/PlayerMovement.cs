@@ -43,9 +43,7 @@ namespace Player_Scripts
         void Start()
         {
             rb = GetComponent<Rigidbody2D>();
-
         }
-
         void Update()
         {
             
@@ -57,14 +55,11 @@ namespace Player_Scripts
 
             if (isDashing) return;
             CheckGrounded();
-
-
             if (!inputEnabled)
             {
                 rb.velocity = new Vector2(0, rb.velocity.y);
                 return;
             }
-
             if (!isDashing)
                 HandleMovement();
 
@@ -72,15 +67,12 @@ namespace Player_Scripts
             if (Input.GetKeyDown(KeyCode.LeftShift) && canDash)
             {
                StartCoroutine(Dash());
-
-            
             }
         }
         
 
     public void DisableControls()
         {
-       
             inputEnabled = false; 
             rb.velocity = Vector2.zero; 
         }
@@ -143,8 +135,7 @@ namespace Player_Scripts
                 groundCheckDistance,
                 groundLayer
             );
-
-
+            
             // Draw the ray in Scene view for debugging (green = hit, red = miss)
             Color rayColor = hit.collider != null ? Color.green : Color.red;
             Debug.DrawRay((Vector2)transform.position + groundCheckOffset, Vector2.down * groundCheckDistance, rayColor);

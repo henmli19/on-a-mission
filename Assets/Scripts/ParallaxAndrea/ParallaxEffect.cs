@@ -80,3 +80,10 @@ public class ParallaxLayer : MonoBehaviour
         if (copies[2] != null) Destroy(copies[2]);
     }
 }
+
+
+
+
+
+
+
