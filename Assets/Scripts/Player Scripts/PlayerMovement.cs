@@ -39,7 +39,7 @@ namespace Player_Scripts
         [SerializeField] private AudioClip dashSound;
         [SerializeField] private AudioClip walkingSound;
         [SerializeField] private AudioClip pickupSound;
-      
+        [SerializeField] private AudioClip MUSIC;
         
         void Start()
         {
@@ -47,6 +47,8 @@ namespace Player_Scripts
         }
         void Update()
         {
+            audioSource.PlayOneShot(MUSIC);
+            
             
             if (beingGrabbed)
             {
@@ -94,6 +96,7 @@ namespace Player_Scripts
             {
                 _Animator.SetBool("isRunning", true);
                 audioSource.PlayOneShot(walkingSound);
+           
             }
             else
             {
@@ -112,9 +115,10 @@ namespace Player_Scripts
         {
             if (isGrounded && (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.Space)))
             {
+                audioSource.PlayOneShot(jumpSound);
                 rb.velocity = new Vector2(rb.velocity.x, jumpForce);
                 isGrounded = false;
-                audioSource.PlayOneShot(jumpSound);
+              
             }
 
             if (isGrounded )
@@ -125,6 +129,7 @@ namespace Player_Scripts
             {
                 _Animator.SetBool("isJumping", true);
                 Debug.Log("isJumping = " + _Animator.GetBool("isJumping"));
+               
             }
         }
         
@@ -149,6 +154,7 @@ namespace Player_Scripts
 
         public IEnumerator Dash()
         {
+            audioSource.PlayOneShot(dashSound);
             canDash = false;
             isDashing = true;
             float originalGravity = rb.gravityScale;
@@ -162,7 +168,7 @@ namespace Player_Scripts
             isDashing = false;
             yield return new WaitForSeconds(dashCooldown);
             canDash = true;
-            audioSource.PlayOneShot(dashSound);
+           
         }
     
         private Coroutine speedBoostCoroutine;
