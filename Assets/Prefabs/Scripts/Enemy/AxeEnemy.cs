@@ -16,20 +16,13 @@ public class AxeEnemy : Enemy
     private bool movingRight = true;
     private bool isAttacking = false;
     private float nextAttackTime = 0f;
-    private Quaternion axeStartRotation;
-    private Quaternion axeDownRotation;
+
 
     protected override void Start()
     {
         base.Start();
         moveSpeed = 1.5f;
         attackRange = 2f;
-        // Save the axe’s original upright rotation
-        if (axeTransform != null)
-        {
-            axeStartRotation = axeTransform.localRotation;
-            axeDownRotation = axeStartRotation * Quaternion.Euler(0, 0, -axeSwingAngle);
-        }
 
         // Find player if not set
         if (player == null)
@@ -115,32 +108,13 @@ public class AxeEnemy : Enemy
         if (axeTransform == null) yield break;
         isAttacking = true;
 
-        // Swing down
-        float elapsed = 0f;
-        while (elapsed < 1f)
-        {
-            axeTransform.localRotation = Quaternion.Lerp(axeStartRotation, axeDownRotation, elapsed);
-            elapsed += Time.deltaTime * axeSwingSpeed;
-            yield return null;
-        }
-
         // Damage if player still nearby
         if (player != null && Vector2.Distance(transform.position, player.position) <= attackRange)
         {
             Debug.Log($"{gameObject.name} hit the player with the axe!");
             // player.GetComponent<PlayerHealth>()?.TakeDamage(damage);
         }
-
-        // Swing back up
-        elapsed = 0f;
-        while (elapsed < 1f)
-        {
-            axeTransform.localRotation = Quaternion.Lerp(axeDownRotation, axeStartRotation, elapsed);
-            elapsed += Time.deltaTime * axeSwingSpeed;
-            yield return null;
-        }
-
-        axeTransform.localRotation = axeStartRotation;
+        
         isAttacking = false;
     }
 
