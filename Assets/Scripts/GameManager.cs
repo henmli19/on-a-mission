@@ -3,86 +3,133 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class GameManager : MonoBehaviour {
-  [Header("Round attributes")]
-  [Min(3)]
-  [SerializeField] private int numRounds = 5;
-  [SerializeField] private float delayLowerBound = 1f;
-  [SerializeField] private float delayUpperBound = 5f;
+public class GameManager : MonoBehaviour
+{
+    [Header("Round attributes")]
+    [Min(3)]
+    [SerializeField] private int numRounds = 5;
+    [SerializeField] private float delayLowerBound = 1f;
+    [SerializeField] private float delayUpperBound = 5f;
 
-  [Header("Game elements")]
-  [SerializeField] private GameObject target;
-  [SerializeField] private GameObject playButton;
-  [SerializeField] private TMPro.TextMeshProUGUI scoreText;
+    [Header("Game elements")]
+    [SerializeField] private GameObject target;
+    [SerializeField] private GameObject playButton;
+    [SerializeField] private TMPro.TextMeshProUGUI scoreText;
+    [SerializeField] private GameObject canvas;
 
+    private double showTime;
+    private List<double> reactionTimes = new();
+    private GameObject player;
+    private GameObject barrier;
 
-  private double showTime;
-  private List<double> reactionTimes = new();
+    // Called when player enters the collider
+    public void StartGame(GameObject playerObj, GameObject barrierObj)
+    {
+        player = playerObj;
+        barrier = barrierObj;
 
-  public void StartGame() {
-    // Hide any UI elements we don't want
-    playButton.SetActive(false);
-    scoreText.gameObject.SetActive(false);
+        // Freeze player
+        Rigidbody2D rb = player.GetComponent<Rigidbody2D>();
+        if (rb != null)
+        {
+            rb.velocity = Vector2.zero;
+            rb.constraints = RigidbodyConstraints2D.FreezeAll;
+        }
 
-    // Clear any prior game state
-    reactionTimes.Clear();
-
-    // Start the coroutine to show the targets.
-    StartCoroutine(PlayRound());
-  }
-
-  private IEnumerator PlayRound() {
-    // Wait for a random duration before showing the target.
-    float delay = Random.Range(delayLowerBound, delayUpperBound);
-    yield return new WaitForSeconds(delay);
-
-    // Record the time the target was shown.
-    // Unscaled so you can't cheat by modifying the timeScale.
-    showTime = Time.unscaledTimeAsDouble;
-
-    // Show the target in a random position.
-    target.transform.position = Random.insideUnitCircle * 3f;
-    target.SetActive(true);
-  }
-
-  public void TargetHit() {
-    // Records the reaction time
-    reactionTimes.Add(Time.unscaledTimeAsDouble - showTime);
-
-    // Hides the target
-    target.SetActive(false);
-
-    // If there are still rounds left, starts the next one
-    if (reactionTimes.Count < numRounds) {
-      StartCoroutine(PlayRound());
-    } else {
-      // Calculates the reaction time score
-      double average = (reactionTimes.Sum() - reactionTimes.Min() - reactionTimes.Max()) / (numRounds - 2);
-      int milliseconds = (int)(average * 1000);
-
-      // Shows the UI
-      playButton.SetActive(true);
-
-      // Updates the score 
-      string scoreType;
-      if (milliseconds < 500) {
-        scoreType = "Outrageous";
-        
-      } else if (milliseconds < 700) {
-        scoreType = "Average";
-        
-      } else {
-        scoreType = "You can do better!";
-      }
-      
-      scoreText.text = $"{scoreType} score: {milliseconds}ms";
-      scoreText.gameObject.SetActive(true);
-
-      // Records the results in milliseconds
-      foreach (double reactionTime in reactionTimes) { 
-        Debug.Log(reactionTime);
-      }
-      Debug.Log($"Score: {milliseconds}");
+        // Show canvas and play button only
+        canvas.SetActive(true);
+        playButton.SetActive(true);
+        scoreText.gameObject.SetActive(false);
+        target.SetActive(false);
     }
-  }
+
+    // Called when player clicks play button
+    public void OnPlayButtonClicked()
+    {
+        playButton.SetActive(false);
+        scoreText.gameObject.SetActive(false);
+        reactionTimes.Clear();
+        StartCoroutine(PlayRound());
+    }
+
+    private IEnumerator PlayRound()
+    {
+        float delay = Random.Range(delayLowerBound, delayUpperBound);
+        yield return new WaitForSecondsRealtime(delay);
+
+        showTime = Time.unscaledTimeAsDouble;
+
+        RectTransform canvasRect = target.GetComponentInParent<Canvas>().GetComponent<RectTransform>();
+        RectTransform targetRect = target.GetComponent<RectTransform>();
+
+        float halfW = (canvasRect.sizeDelta.x / 2) - 60f; // 60 = padding so it doesn't go off edge
+        float halfH = (canvasRect.sizeDelta.y / 2) - 60f;
+
+        targetRect.anchoredPosition = new Vector2(
+            Random.Range(-halfW, halfW),
+            Random.Range(-halfH, halfH)
+        );
+
+        // Make sure anchor is centered
+        targetRect.anchorMin = new Vector2(0.5f, 0.5f);
+        targetRect.anchorMax = new Vector2(0.5f, 0.5f);
+        targetRect.pivot = new Vector2(0.5f, 0.5f);
+
+        target.SetActive(true);
+    }
+    public void TargetHit()
+    {
+        reactionTimes.Add(Time.unscaledTimeAsDouble - showTime);
+        target.SetActive(false);
+
+        if (reactionTimes.Count < numRounds)
+        {
+            StartCoroutine(PlayRound());
+        }
+        else
+        {
+            double average = (reactionTimes.Sum() - reactionTimes.Min() - reactionTimes.Max()) / (numRounds - 2);
+            int milliseconds = (int)(average * 1000);
+
+            if (milliseconds < 500)
+                Pass(milliseconds, "Outrageous");
+            else if (milliseconds < 700)
+                Pass(milliseconds, "Average");
+            else
+            {
+                scoreText.text = $"You can do better! — {milliseconds}ms, Try again!";
+                scoreText.gameObject.SetActive(true);
+                StartCoroutine(RetryAfterDelay());
+            }
+        }
+    }
+
+    private void Pass(int milliseconds, string scoreType)
+    {
+        scoreText.text = $"{scoreType} — {milliseconds}ms!";
+        scoreText.gameObject.SetActive(true);
+
+        Rigidbody2D rb = player.GetComponent<Rigidbody2D>();
+        if (rb != null)
+            rb.constraints = RigidbodyConstraints2D.FreezeRotation;
+
+        if (barrier != null)
+            barrier.SetActive(false);
+
+        StartCoroutine(HideCanvasAfterDelay());
+    }
+
+    private IEnumerator HideCanvasAfterDelay()
+    {
+        yield return new WaitForSecondsRealtime(2f);
+        canvas.SetActive(false);
+    }
+
+    private IEnumerator RetryAfterDelay()
+    {
+        yield return new WaitForSecondsRealtime(2f);
+        scoreText.gameObject.SetActive(false);
+        reactionTimes.Clear();
+        StartCoroutine(PlayRound());
+    }
 }

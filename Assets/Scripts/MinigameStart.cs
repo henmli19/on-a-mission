@@ -3,6 +3,7 @@ using UnityEngine;
 public class MinigameStart : MonoBehaviour
 {
     [SerializeField] private GameManager gameManager;
+    [SerializeField] private GameObject barrier;
 
     private bool hasStarted = false;
 
@@ -11,7 +12,7 @@ public class MinigameStart : MonoBehaviour
         if (!hasStarted && other.CompareTag("Player"))
         {
             hasStarted = true;
-            gameManager.StartGame();
+            gameManager.StartGame(other.gameObject, barrier);
         }
     }
 }

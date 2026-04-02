@@ -1,23 +1,32 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class QuitMenu : MonoBehaviour
 {
     public static QuitMenu instance;
-    public GameObject menuPanel; // assign your menu UI panel in Inspector
-
+    public GameObject menuPanel;
+    public Button menuButton;
+    public Button restartButton;
 
     void Awake()
     {
         instance = this;
         menuPanel.SetActive(false);
     }
-    
+
+    private void Start()
+    {
+        menuButton.onClick.AddListener(GoToMenu);
+        restartButton.onClick.AddListener(Restart);
+    }
 
     public void ShowDeathMenu()
     {
         menuPanel.SetActive(true);
         Time.timeScale = 0f;
+
+      
     }
 
     void GoToMenu()

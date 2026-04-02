@@ -39,9 +39,9 @@ TagManager:
   - 
   - 
   - 
-  - 
-  - 
-  - 
+  - Powerups
+  - border
+  - Minigame
   - confiner
   - Background
   m_SortingLayers:
@@ -54,6 +54,12 @@ TagManager:
   - name: Interactable
     uniqueID: 1596734803
     locked: 0
-  - name: Player
+  - name: NPC
     uniqueID: 1807018013
+    locked: 0
+  - name: Enemy
+    uniqueID: 3655883917
+    locked: 0
+  - name: Player
+    uniqueID: 2821103017
     locked: 0

@@ -12,7 +12,7 @@ public class PauseMenu : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape)&& !settingsPanel.activeInHierarchy)
+        if (Input.GetKeyDown(KeyCode.Escape)&& !settingsPanel.activeInHierarchy && !QuitMenu.instance.menuPanel.activeInHierarchy)
         {
             if (isPaused)
                 Resume();
