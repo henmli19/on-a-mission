@@ -983,7 +983,7 @@ MonoBehaviour:
   attackRange: 20
   playerLayer:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 128
   patrolRadius: 3
   grabSpeed: 5
   pullUpForce: 3

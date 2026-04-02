@@ -1,5 +1,12 @@
 using UnityEngine;
 
+// ─────────────────────────────────────────────────────────────
+//  QuestEnemy
+//
+//  Attach to any enemy prefab that should count toward the
+//  quest kill counter. Also added automatically at runtime
+//  by QuestNPC when it spawns enemies.
+// ─────────────────────────────────────────────────────────────
 public class QuestEnemy : MonoBehaviour
 {
     private QuestNPC questNPC;

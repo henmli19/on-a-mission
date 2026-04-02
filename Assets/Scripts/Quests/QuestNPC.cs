@@ -1,42 +1,37 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Playables;
+using UnityEngine.SceneManagement;
 using TMPro;
 
 public class QuestNPC : MonoBehaviour
 {
-    // ── Interaction ───────────────────────────
     [Header("Interaction")]
     public KeyCode interactKey = KeyCode.E;
     public float interactRange = 2f;
-    public GameObject interactPromptUI;
 
-    // ── Timelines ─────────────────────────────
     [Header("Timelines")]
     public PlayableDirector phase0Timeline;
     public PlayableDirector phase1Timeline;
+    public PlayableDirector phase1bTimeline; 
     public PlayableDirector phase2Timeline;
 
-    // ── Enemy Spawning ────────────────────────
     [Header("Enemy Spawning")]
     public GameObject[] enemyPrefabs;
     public Transform[] spawnPoints;
     public int enemiesPerWave = 5;
+    public Vector3 enemySpawnScale = new Vector3(0.5f, 0.5f, 1f);
 
-    // ── Kill Counter UI ───────────────────────
     [Header("Kill Counter")]
     public TMP_Text killCounterText;
     public int totalEnemies = 10;
 
-    // ── Level Complete ────────────────────────
     [Header("Level Complete")]
     public GameObject levelCompleteUI;
 
-    // ── Memory Minigame ───────────────────────
     [Header("Memory Minigame")]
-    public GameObject memoryMinigameObject;
+    public string memorySceneName = "MemoryGame";
 
-    // ── NPC Movement ──────────────────────────
     [Header("NPC Positions")]
     public Transform positionStart;
     public Transform positionAfterWave1;
@@ -44,9 +39,14 @@ public class QuestNPC : MonoBehaviour
 
     [Header("NPC Visual")]
     public GameObject npcVisual;
-    public float disappearDelay = 0.5f;
 
-    // ── Internal State ────────────────────────
+    [Header("Game UI & Background")]
+    public GameObject gameUI;         // your HUD canvas
+    public GameObject gameBackground; // your level background object
+    
+    [Header("Camera")]
+    public Camera mainCamera;
+    
     private enum QuestPhase
     {
         NotStarted,
@@ -69,15 +69,12 @@ public class QuestNPC : MonoBehaviour
     {
         player = GameObject.FindGameObjectWithTag("Player")?.transform;
 
-        if (phase0Timeline != null) phase0Timeline.Stop();
-        if (phase1Timeline != null) phase1Timeline.Stop();
-        if (phase2Timeline != null) phase2Timeline.Stop();
+        if (levelCompleteUI != null)
+            levelCompleteUI.SetActive(false);
 
-        if (interactPromptUI != null) interactPromptUI.SetActive(false);
-        if (levelCompleteUI != null) levelCompleteUI.SetActive(false);
-        if (memoryMinigameObject != null) memoryMinigameObject.SetActive(false);
+        if (npcVisual != null)
+            npcVisual.SetActive(true);
 
-        // Start position
         if (positionStart != null)
             transform.position = positionStart.position;
 
@@ -87,18 +84,13 @@ public class QuestNPC : MonoBehaviour
     // ─────────────────────────────────────────
     private void Update()
     {
-        if (player == null || timelinePlaying || npcVisual == null || !npcVisual.activeSelf)
+        if (player == null || timelinePlaying)
             return;
 
         float dist = Vector2.Distance(transform.position, player.position);
         bool playerInRange = dist <= interactRange;
 
-        bool canTalk = playerInRange && IsNPCTalkable();
-
-        if (interactPromptUI != null)
-            interactPromptUI.SetActive(canTalk);
-
-        if (canTalk && Input.GetKeyDown(interactKey))
+        if (playerInRange && IsNPCTalkable() && Input.GetKeyDown(interactKey))
             OnPlayerInteract();
     }
 
@@ -109,6 +101,7 @@ public class QuestNPC : MonoBehaviour
             || currentPhase == QuestPhase.Wave2Complete;
     }
 
+    // ─────────────────────────────────────────
     private void OnPlayerInteract()
     {
         switch (currentPhase)
@@ -127,11 +120,10 @@ public class QuestNPC : MonoBehaviour
         }
     }
 
-    // ─────────────────────────────────────────
+    // ───── PHASE 0: Dialogue → Spawn Wave 1 ─────
     private IEnumerator Phase0Sequence()
     {
         timelinePlaying = true;
-        if (interactPromptUI != null) interactPromptUI.SetActive(false);
 
         if (phase0Timeline != null)
         {
@@ -141,51 +133,73 @@ public class QuestNPC : MonoBehaviour
 
         timelinePlaying = false;
 
-        StartCoroutine(Disappear());
-
-        SpawnWave();
         currentPhase = QuestPhase.Wave1Active;
-        UpdateKillCounter();
+        SpawnWave();
     }
 
-    // ─────────────────────────────────────────
+    // ───── PHASE 1: Dialogue → Memory Minigame → Spawn Wave 2 ─────
     private IEnumerator Phase1Sequence()
     {
         timelinePlaying = true;
-        if (interactPromptUI != null) interactPromptUI.SetActive(false);
 
-        currentPhase = QuestPhase.MinigameActive;
-
+        // 1. Play dialogue and wait
         if (phase1Timeline != null)
         {
             phase1Timeline.Play();
             yield return new WaitUntil(() => phase1Timeline.state != PlayState.Playing);
         }
 
-        if (memoryMinigameObject != null)
+        // 2. Hide game UI and background before minigame loads
+        if (gameUI != null) gameUI.SetActive(false);
+        if (gameBackground != null) gameBackground.SetActive(false);
+
+        // 3. Load minigame additively
+        currentPhase = QuestPhase.MinigameActive;
+        yield return SceneManager.LoadSceneAsync(memorySceneName, LoadSceneMode.Additive);
+
+        // 4. Wait for minigame to finish
+        yield return new WaitUntil(() => currentPhase != QuestPhase.MinigameActive);
+
+        // 5. Unload minigame
+        yield return SceneManager.UnloadSceneAsync(memorySceneName);
+
+        // 6. Restore UI and background
+        if (gameUI != null) gameUI.SetActive(true);
+        if (gameBackground != null) gameBackground.SetActive(true);
+
+        if (mainCamera != null)
         {
-            memoryMinigameObject.SetActive(true);
-            yield return new WaitUntil(() => currentPhase != QuestPhase.MinigameActive);
+            mainCamera.gameObject.SetActive(false);
+            mainCamera.gameObject.SetActive(true);
         }
-        else
-        {
-            currentPhase = QuestPhase.Wave2Active;
-        }
+        Camera.main?.gameObject.SetActive(true);
 
         timelinePlaying = false;
 
-        StartCoroutine(Disappear());
+        // 7. NPC continues talking after minigame — MUST happen before spawn
+        timelinePlaying = true;
+        if (phase1bTimeline != null)
+        {
+            phase1bTimeline.Play();
+            yield return new WaitUntil(() => phase1bTimeline.state != PlayState.Playing);
+        }
+        else
+        {
+            Debug.LogWarning("QuestNPC: phase1bTimeline is not assigned! Assign it in the Inspector.");
+            yield return new WaitForSeconds(2f); // fallback delay so spawn isn't instant
+        }
+        timelinePlaying = false;
 
-        SpawnWave();
+        // 8. Delay then spawn wave 2
+        yield return new WaitForSeconds(1f);
         currentPhase = QuestPhase.Wave2Active;
-        UpdateKillCounter();
+        SpawnWave();
     }
 
-    // ─────────────────────────────────────────
+    // ───── PHASE 2: Dialogue → Level Complete ─────
     private IEnumerator Phase2Sequence()
     {
         timelinePlaying = true;
-        if (interactPromptUI != null) interactPromptUI.SetActive(false);
 
         if (phase2Timeline != null)
         {
@@ -200,39 +214,47 @@ public class QuestNPC : MonoBehaviour
             levelCompleteUI.SetActive(true);
     }
 
-    // ─────────────────────────────────────────
+    // ───── Called by CardController when minigame is complete ─────
+    // Change OnMinigameComplete to use a proper intermediate phase
     public void OnMinigameComplete()
     {
-        if (memoryMinigameObject != null)
-            memoryMinigameObject.SetActive(false);
-
-        currentPhase = QuestPhase.Wave2Active;
+        currentPhase = QuestPhase.Wave1Complete; // just needs to be != MinigameActive
     }
 
-    // ─────────────────────────────────────────
+    // ───── ENEMY SPAWNING ─────
     private void SpawnWave()
     {
-        if (enemyPrefabs.Length == 0 || spawnPoints.Length == 0) return;
+        if (enemyPrefabs == null || enemyPrefabs.Length == 0)
+        {
+            Debug.LogWarning("QuestNPC: No enemy prefabs assigned!");
+            return;
+        }
+        if (spawnPoints == null || spawnPoints.Length == 0)
+        {
+            Debug.LogWarning("QuestNPC: No spawn points assigned!");
+            return;
+        }
 
         activeEnemies = 0;
 
         for (int i = 0; i < enemiesPerWave; i++)
         {
             Transform spawnPoint = spawnPoints[Random.Range(0, spawnPoints.Length)];
-            GameObject prefab = enemyPrefabs[Random.Range(0, enemyPrefabs.Length)];
-
-            GameObject enemy = Instantiate(prefab, spawnPoint.position, Quaternion.identity);
+            GameObject enemy = Instantiate(
+                enemyPrefabs[Random.Range(0, enemyPrefabs.Length)],
+                spawnPoint.position,
+                Quaternion.identity
+            );
+            // No scale override — prefab size is used as-is
 
             QuestEnemy qe = enemy.GetComponent<QuestEnemy>();
-            if (qe == null)
-                qe = enemy.AddComponent<QuestEnemy>();
-
+            if (qe == null) qe = enemy.AddComponent<QuestEnemy>();
             qe.Init(this);
             activeEnemies++;
         }
     }
 
-    // ─────────────────────────────────────────
+    // ───── Called by QuestEnemy when it dies ─────
     public void OnQuestEnemyKilled()
     {
         totalKills++;
@@ -244,35 +266,31 @@ public class QuestNPC : MonoBehaviour
             if (currentPhase == QuestPhase.Wave1Active)
             {
                 currentPhase = QuestPhase.Wave1Complete;
-                AppearAt(positionAfterWave1);
+                if (positionAfterWave1 != null)
+                    transform.position = positionAfterWave1.position;
+                Debug.Log("Wave 1 complete! Talk to the NPC.");
             }
             else if (currentPhase == QuestPhase.Wave2Active)
             {
                 currentPhase = QuestPhase.Wave2Complete;
-                AppearAt(positionAfterWave2);
+                if (positionAfterWave2 != null)
+                    transform.position = positionAfterWave2.position;
+                Debug.Log("Wave 2 complete! Talk to the NPC.");
             }
         }
     }
 
-    // ─────────────────────────────────────────
-    private IEnumerator Disappear()
-    {
-        yield return new WaitForSeconds(disappearDelay);
-        npcVisual.SetActive(false);
-    }
-
-    private void AppearAt(Transform target)
-    {
-        if (target == null) return;
-
-        transform.position = target.position;
-        npcVisual.SetActive(true);
-    }
-
-    // ─────────────────────────────────────────
+    // ───── Kill Counter UI ─────
     private void UpdateKillCounter()
     {
         if (killCounterText != null)
-            killCounterText.text = "[" + totalKills + "/" + totalEnemies + "] Enemies killed";
+            killCounterText.text = $"[{totalKills}/{totalEnemies}] Enemies killed";
     }
-} 
+
+    // ───── Gizmos ─────
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.green;
+        Gizmos.DrawWireSphere(transform.position, interactRange);
+    }
+}

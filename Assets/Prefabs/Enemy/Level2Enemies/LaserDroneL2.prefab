@@ -96,7 +96,7 @@ MonoBehaviour:
   attackInterval: 2
   laserPrefab: {fileID: 3296051891103254942, guid: c6b321dfb2ec9884592d023051ba5a6f, type: 3}
   firePoint: {fileID: 7310831031280466492}
-  laserSpeed: 10
+  laserSpeed: 15
 --- !u!95 &5820526864156436028
 Animator:
   serializedVersion: 5
@@ -177,7 +177,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -7848505141511931676, guid: bfbc0f639ccba2a4a824b20c75eff901, type: 3}
       propertyPath: m_SortingOrder
-      value: 12
+      value: 13
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: bfbc0f639ccba2a4a824b20c75eff901, type: 3}
       propertyPath: m_LocalScale.x
@@ -237,7 +237,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -5380513782451149225, guid: bfbc0f639ccba2a4a824b20c75eff901, type: 3}
       propertyPath: m_SortingOrder
-      value: 12
+      value: 13
       objectReference: {fileID: 0}
     - target: {fileID: 1092641441002539719, guid: bfbc0f639ccba2a4a824b20c75eff901, type: 3}
       propertyPath: m_SortingOrder
@@ -245,7 +245,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2943773840848760296, guid: bfbc0f639ccba2a4a824b20c75eff901, type: 3}
       propertyPath: m_SortingOrder
-      value: 12
+      value: 13
       objectReference: {fileID: 0}
     - target: {fileID: 5767326889569372918, guid: bfbc0f639ccba2a4a824b20c75eff901, type: 3}
       propertyPath: m_SortingOrder
