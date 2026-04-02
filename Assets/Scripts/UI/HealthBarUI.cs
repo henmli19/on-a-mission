@@ -9,6 +9,7 @@ public class BatteryHealthUI : MonoBehaviour
     public Image[] bars;   
     public int maxHealth = 6;
     private int currentHealth;
+    private bool isDead = false;
     void Start()
     {
         currentHealth = maxHealth;
@@ -21,7 +22,9 @@ public class BatteryHealthUI : MonoBehaviour
         UpdateUI();
         if (currentHealth == 0)
         {
+            isDead = true;
             Destroy(gameObject);
+            QuitMenu.instance.ShowDeathMenu(); // open the menu
             audioSource.PlayOneShot(deathSound);
         }
         audioSource.PlayOneShot(damageSound);
