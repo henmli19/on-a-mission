@@ -23,6 +23,8 @@ public abstract class Enemy : MonoBehaviour
 
     protected Transform player;
     protected bool isDead = false;
+    
+    public static QuestKillEnemies quest;
 
     protected virtual void Start()
     {
@@ -95,6 +97,8 @@ public abstract class Enemy : MonoBehaviour
         isDead = true;
         Debug.Log(gameObject.name + " is dead!");
         Destroy(gameObject, 1f); // kurz Delay für Animation
+        
+        quest.EnemyKilled();
     }
 
     protected abstract void Attack(); // wird in Kindklassen implementiert

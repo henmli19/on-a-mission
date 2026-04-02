@@ -1,89 +1,84 @@
 using UnityEngine;
-using Cinemachine;
 
 public class ParallaxLayer : MonoBehaviour
 {
-    
     [Range(0f, 1f)]
-    public float parallaxFactor;
+    public float parallaxFactor = 0.5f;
 
-    private Transform cam;         
-    private float spriteWidth;      
-    private float startPosX;        
+    private Transform cam;
+    private float spriteWidth;
 
-    private GameObject[] copies = new GameObject[3]; 
+    private GameObject[] tiles = new GameObject[3];
+
+    private int centerIndex = 0;
 
     void Start()
     {
         cam = Camera.main.transform;
-        startPosX = transform.position.x;
-        spriteWidth = GetComponent<SpriteRenderer>().bounds.size.x;
-        
-        copies[0] = CreateCopy(-spriteWidth); 
-        copies[1] = gameObject;               
-        copies[2] = CreateCopy(spriteWidth);  
-        
-        CinemachineCore.CameraUpdatedEvent.AddListener(OnCameraUpdated);
+
+        SpriteRenderer sr = GetComponent<SpriteRenderer>();
+
+        // local width (important for scaled parents)
+        spriteWidth = sr.sprite.bounds.size.x;
+
+        tiles[0] = gameObject;
+        tiles[1] = CreateCopy();
+        tiles[2] = CreateCopy();
+
+        // initial placement
+        UpdateTiles();
     }
 
-    // Clones this sprite at a given horizontal offset
-    GameObject CreateCopy(float offsetX)
+    GameObject CreateCopy()
     {
-        GameObject copy = new GameObject(gameObject.name + "_copy");
-        
-        copy.transform.position = new Vector3(
-            transform.position.x + offsetX,
-            transform.position.y,
-            transform.position.z
-        );
-        SpriteRenderer sr = copy.AddComponent<SpriteRenderer>();
-        sr.sprite = GetComponent<SpriteRenderer>().sprite;
-        sr.sortingLayerName = GetComponent<SpriteRenderer>().sortingLayerName;
-        sr.sortingOrder = GetComponent<SpriteRenderer>().sortingOrder;
+        GameObject copy = Instantiate(gameObject);
+
+        copy.transform.SetParent(transform.parent);
         copy.transform.localScale = transform.localScale;
+
+        Destroy(copy.GetComponent<ParallaxLayer>());
+
         return copy;
     }
 
-    // Called automatically by Cinemachine after the camera finishes moving
-    void OnCameraUpdated(CinemachineBrain brain)
+    void LateUpdate()
     {
-  
-        float dist = cam.position.x * parallaxFactor;
-        float newX = startPosX + dist;
-        
-        for (int i = 0; i < 3; i++)
+        float camX = cam.position.x * parallaxFactor;
+
+        float localCamX;
+
+        // If there's no parent, just use world space directly
+        if (transform.parent != null)
+            localCamX = transform.parent.InverseTransformPoint(new Vector3(camX, 0, 0)).x;
+        else
+            localCamX = camX;
+
+        // Handle RIGHT movement
+        while (localCamX > (centerIndex + 1) * spriteWidth)
         {
-            if (copies[i] != null)
-            {
-                copies[i].transform.position = new Vector3(
-                    newX + (i - 1) * spriteWidth,
-                    transform.position.y,
-                    transform.position.z
-                );
-            }
+            centerIndex++;
+            UpdateTiles();
         }
 
-        // Looping logic: shift startPosX when camera moves far enough
-        // This repositions the layer so it loops forever seamlessly
-        float relativeCamPos = cam.position.x * (1 - parallaxFactor);
-        if (relativeCamPos > startPosX + spriteWidth) startPosX += spriteWidth;
-        else if (relativeCamPos < startPosX - spriteWidth) startPosX -= spriteWidth;
+        // Handle LEFT movement
+        while (localCamX < (centerIndex - 1) * spriteWidth)
+        {
+            centerIndex--;
+            UpdateTiles();
+        }
     }
 
-    void OnDestroy()
+    void UpdateTiles()
     {
-        // Unsubscribe from Cinemachine event when this object is destroyed
-        CinemachineCore.CameraUpdatedEvent.RemoveListener(OnCameraUpdated);
+        for (int i = 0; i < 3; i++)
+        {
+            float xPos = (centerIndex + i - 1) * spriteWidth;
 
-        // Clean up the left and right copies we created
-        if (copies[0] != null) Destroy(copies[0]);
-        if (copies[2] != null) Destroy(copies[2]);
+            tiles[i].transform.localPosition = new Vector3(
+                xPos,
+                transform.localPosition.y,
+                transform.localPosition.z
+            );
+        }
     }
 }
-
-
-
-
-
-
-

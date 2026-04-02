@@ -1,129 +1,107 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Random = UnityEngine.Random;
-using UnityEngine.SceneManagement;
 using TMPro;
 using PrimeTween;
 
-public class CardController : MonoBehaviour {
-    
-    [Header("Card Setup")]
-    [SerializeField] private Cards_Script cardPrefab;     // Prefab for a single card
-    [SerializeField] private Transform gridtransform;     // Parent transform for the grid layout
-    [SerializeField] private Sprite[] sprites;            // Unique sprites (each will be duplicated to form pairs)
+public class CardController : MonoBehaviour
+{
+    [SerializeField] private Cards_Script cardPrefab;
+    [SerializeField] private Transform gridtransform;
+    [SerializeField] private Sprite[] sprites;
 
-    [Header("UI (TextMeshPro)")]
-    [SerializeField] private TMP_Text movesText;          // Displays number of moves
-    [SerializeField] private TMP_Text pairsText;          // Displays found pairs
-    [SerializeField] private TMP_Text timerText;          // Displays elapsed time
-    
-    private List<Sprite> spritePairs;                     // List containing all sprites as pairs
-    private Cards_Script firstSelected;                   // First selected card in a turn
-    private Cards_Script secondSelected;                  // Second selected card in a turn
+    [SerializeField] private TMP_Text movesText;
+    [SerializeField] private TMP_Text pairsText;
+    [SerializeField] private TMP_Text timerText;
 
-    private int movesCount;                               // Number of completed moves (2 cards = 1 move)
-    private int pairsFound;                               // Number of successfully matched pairs
-    private float timeElapsed;                            // Elapsed game time
-    private bool gameWon;                                 // Flag to stop input and timer when finished
-    private bool inputLocked;                             // Prevents interaction during matching
+    private List<Sprite> spritePairs;
+    private Cards_Script firstSelected;
+    private Cards_Script secondSelected;
 
-    private void Start() {
-        // Initialize game state
-        movesCount = 0;
-        pairsFound = 0;
-        timeElapsed = 0f;
-        gameWon = false;
-        inputLocked = false;
-        
-        PrepareSprites(); // Prepare paired sprite list
-        CreateCards(); // Instantiate cards in grid
-        UpdateUI(); // Update UI at start
+    private int movesCount;
+    private int pairsFound;
+    private float timeElapsed;
+    private bool inputLocked;
 
+    private void Start()
+    {
+        PrepareSprites();
+        CreateCards();
+        UpdateUI();
     }
 
-    private void Update() {
-        // Stop timer if game is finished
-        if (gameWon) return;
-
-        // Increase time every frame
+    private void Update()
+    {
         timeElapsed += Time.deltaTime;
         UpdateUI();
     }
 
-    private void PrepareSprites() {
-        // Create a new list where every sprite appears twice
+    private void PrepareSprites()
+    {
         spritePairs = new List<Sprite>();
-
-        for (int i = 0; i < sprites.Length; i++) {
-            spritePairs.Add(sprites[i]);
-            spritePairs.Add(sprites[i]);
+        foreach (var s in sprites)
+        {
+            spritePairs.Add(s);
+            spritePairs.Add(s);
         }
-        
-        ShufflePairs(spritePairs); // Shuffle sprites for random distribution
+        Shuffle(spritePairs);
     }
 
-    private void CreateCards() {
-        // Instantiate cards and assign sprite + controller reference
-        for (int i = 0; i < spritePairs.Count; i++) {
-            Cards_Script card = Instantiate(cardPrefab, gridtransform);
-            card.Controller = this;                      
-            card.SetIconSprite(spritePairs[i]);          
+    private void CreateCards()
+    {
+        foreach (var s in spritePairs)
+        {
+            var card = Instantiate(cardPrefab, gridtransform);
+            card.Controller = this;
+            card.SetIconSprite(s);
         }
     }
 
-    public void SetSelected(Cards_Script card) {
+    public void SetSelected(Cards_Script card)
+    {
+        if (inputLocked || card.isSelected) return;
 
-        if (gameWon || inputLocked) return;     
-        if (card.isSelected) return;            
-        if (firstSelected == card) return;      
-
-        // Reveal selected card
         card.ShowCard();
 
-        if (firstSelected == null) {
+        if (firstSelected == null)
+        {
             firstSelected = card;
             return;
         }
 
-        if (secondSelected == null) {
-            secondSelected = card;
-            
-            movesCount++; // One move consists of flipping two cards
-            UpdateUI();
+        secondSelected = card;
+        movesCount++;
+        StartCoroutine(CheckMatch(firstSelected, secondSelected));
 
-            // Start match-check coroutine
-            StartCoroutine(CheckMatching(firstSelected, secondSelected));
-
-            firstSelected = null;
-            secondSelected = null;
-        }
+        firstSelected = null;
+        secondSelected = null;
     }
 
-    private IEnumerator CheckMatching(Cards_Script a, Cards_Script b) {
-
+    private IEnumerator CheckMatch(Cards_Script a, Cards_Script b)
+    {
         inputLocked = true;
+        yield return new WaitForSecondsRealtime(0.35f);
 
-        // Short delay so player can see both cards
-        yield return new WaitForSeconds(0.35f);
-
-        // Compare sprite references
-        if (a.iconSprite == b.iconSprite) {
+        if (a.iconSprite == b.iconSprite)
+        {
             pairsFound++;
-            UpdateUI();
 
-            // Win condition: all pairs found
-            if (pairsFound >= spritePairs.Count / 2) {
-                gameWon = true;
+            if (pairsFound >= spritePairs.Count / 2)
+            {
+                Debug.Log("Minigame finished!");
 
-                // Visual feedback animation
-                Sequence.Create()
-                    .Chain(Tween.Scale(gridtransform, Vector3.one * 1.05f, 0.2f, ease: Ease.OutBack))
-                    .Chain(Tween.Scale(gridtransform, Vector3.one, 0.12f));
+                // Tell the QuestNPC the minigame is done
+                // Works across scenes because QuestNPC is in the
+                // main scene which stays loaded additively
+                QuestNPC questNPC = FindObjectOfType<QuestNPC>();
+                if (questNPC != null)
+                    questNPC.OnMinigameComplete();
+                else
+                    Debug.LogError("CardController: Could not find QuestNPC in scene!");
             }
-        } 
-        else {
-            // If no match, flip cards back
+        }
+        else
+        {
             a.HideCard();
             b.HideCard();
         }
@@ -131,29 +109,25 @@ public class CardController : MonoBehaviour {
         inputLocked = false;
     }
 
-    private void ShufflePairs(List<Sprite> list) {
-        // Fisher-Yates shuffle algorithm
-        for (int i = list.Count - 1; i > 0; i--) {
+    private void Shuffle(List<Sprite> list)
+    {
+        for (int i = list.Count - 1; i > 0; i--)
+        {
             int r = Random.Range(0, i + 1);
-            Sprite tmp = list[i];
-            list[i] = list[r];
-            list[r] = tmp;
+            (list[i], list[r]) = (list[r], list[i]);
         }
     }
 
-    private void UpdateUI() {
-
-        if (movesText != null) 
+    private void UpdateUI()
+    {
+        if (movesText != null)
             movesText.text = $"Moves: {movesCount}";
-
-        if (pairsText != null) 
-            pairsText.text = $"Pairs found: {pairsFound}/{spritePairs.Count / 2}";
-
-        if (timerText != null) {
-            int seconds = Mathf.FloorToInt(timeElapsed);
-            int mins = seconds / 60;
-            int secs = seconds % 60;
-            timerText.text = $"Time: {mins:00}:{secs:00}";
+        if (pairsText != null)
+            pairsText.text = $"Pairs: {pairsFound}/{spritePairs.Count / 2}";
+        if (timerText != null)
+        {
+            int sec = Mathf.FloorToInt(timeElapsed);
+            timerText.text = $"Time: {sec / 60:00}:{sec % 60:00}";
         }
     }
 }

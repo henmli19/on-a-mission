@@ -1,76 +1,73 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using PrimeTween;
-public class Cards_Script : MonoBehaviour {
 
-    [SerializeField] private Image iconImage;// UI Image component displaying the sprite
-    public Sprite hiddenIconSprite;// Back side of the card
-    public Sprite iconSprite;// Front side sprite
+public class Cards_Script : MonoBehaviour
+{
+    [SerializeField] private Image iconImage;
+    public Sprite hiddenIconSprite;
+    public Sprite iconSprite;
 
-    public bool isSelected;// Indicates whether card is currently revealed
-    public CardController Controller;// Reference to main controller
+    public bool isSelected;
+    public CardController Controller;
 
-    public void OnCardClick() {
-        // Forward click event to controller (centralized logic)
+    public void OnCardClick()
+    {
         Controller.SetSelected(this);
     }
 
-    public void SetIconSprite(Sprite sprite) {
-
+    public void SetIconSprite(Sprite sprite)
+    {
         iconSprite = sprite;
 
-        if (sprite != null && sprite.name == "dron_enemy")
+        if (sprite == null) return;
+
+        switch (sprite.name)
         {
-            iconImage.rectTransform.sizeDelta = new Vector2(230, 135);
-        }
-        else if (sprite != null && sprite.name == "AI_NPC_2")
-        {
-            iconImage.rectTransform.sizeDelta = new Vector2(160, 165);
-        }
-        else if (sprite != null && sprite.name == "Health_GameObjekt")
-        {
-            iconImage.rectTransform.sizeDelta = new Vector2(160, 160);
-        }
-        
-        else if (sprite != null && sprite.name == "Rust_NPC_3")
-        {
-            iconImage.rectTransform.sizeDelta = new Vector2(151, 169);
-        }
-        
-        else if (sprite != null && sprite.name == "Minimap")
-        {
-            iconImage.rectTransform.sizeDelta = new Vector2(180, 180);
-        }
-        else if (sprite != null && sprite.name == "NPC_1")
-        {
-            iconImage.rectTransform.sizeDelta = new Vector2(173, 152);
-        }
-        else
-        {
-            iconImage.rectTransform.sizeDelta = new Vector2(230, 200); // normal
+            case "dron_enemy":
+                iconImage.rectTransform.sizeDelta = new Vector2(230, 135);
+                break;
+            case "AI_NPC_2":
+                iconImage.rectTransform.sizeDelta = new Vector2(160, 165);
+                break;
+            case "Health_GameObjekt":
+                iconImage.rectTransform.sizeDelta = new Vector2(160, 160);
+                break;
+            case "Rust_NPC_3":
+                iconImage.rectTransform.sizeDelta = new Vector2(151, 169);
+                break;
+            case "Minimap":
+                iconImage.rectTransform.sizeDelta = new Vector2(180, 180);
+                break;
+            case "NPC_1":
+                iconImage.rectTransform.sizeDelta = new Vector2(173, 152);
+                break;
+            default:
+                iconImage.rectTransform.sizeDelta = new Vector2(230, 200);
+                break;
         }
     }
 
-    public void ShowCard() {
-
-        // Rotate to simulate flip animation
-        Tween.Rotation(transform, new Vector3(0f, 180f, 0f), 0.2f);
-
-        // Change sprite through animation
-        Tween.Delay(0.1f, () => iconImage.sprite = iconSprite);
-
+    public void ShowCard()
+    {
         isSelected = true;
+
+        Tween.LocalRotation(transform, new Vector3(0f, 90f, 0f), 0.1f)
+            .OnComplete(() =>
+            {
+                iconImage.sprite = iconSprite;
+                Tween.LocalRotation(transform, new Vector3(0f, 180f, 0f), 0.1f);
+            });
     }
 
-    public void HideCard() {
-
-        Tween.Rotation(transform, new Vector3(0f, 0f, 0f), 0.2f);
-
-        Tween.Delay(0.1f, () => {
-            iconImage.sprite = hiddenIconSprite;
-            isSelected = false;
-        });
+    public void HideCard()
+    {
+        Tween.LocalRotation(transform, new Vector3(0f, 90f, 0f), 0.1f)
+            .OnComplete(() =>
+            {
+                iconImage.sprite = hiddenIconSprite;
+                Tween.LocalRotation(transform, Vector3.zero, 0.1f)
+                    .OnComplete(() => isSelected = false);
+            });
     }
 }
