@@ -94,9 +94,9 @@ MonoBehaviour:
   moveRadius: 3
   moveInterval: 3
   attackInterval: 2
-  laserPrefab: {fileID: 3296051891103254942, guid: c6b321dfb2ec9884592d023051ba5a6f, type: 3}
+  laserPrefab: {fileID: 3296051891103254942, guid: a8c9ce8d8afb9d844bb01f7eb5f5ae7f, type: 3}
   firePoint: {fileID: 7310831031280466492}
-  laserSpeed: 15
+  laserSpeed: 20
 --- !u!95 &5820526864156436028
 Animator:
   serializedVersion: 5

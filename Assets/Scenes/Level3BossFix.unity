@@ -631,7 +631,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   textBox: {fileID: 59507123}
-  fullText: 
+  fullText: Can you get rid of them again?
   typingSpeed: 0.04
 --- !u!114 &59507123
 MonoBehaviour:
@@ -653,7 +653,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Thank you.
+  m_text: 
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: c44beed419df6fc49b76eefae7c91a24, type: 2}
   m_sharedMaterial: {fileID: 9051150976177667536, guid: c44beed419df6fc49b76eefae7c91a24, type: 2}
@@ -858,10 +858,9 @@ MonoBehaviour:
   - {fileID: 2019474561}
   - {fileID: 1354650614}
   enemiesPerWave: 5
-  enemySpawnScale: {x: 0.5, y: 0.5, z: 1}
   killCounterText: {fileID: 1277363826}
   totalEnemies: 10
-  levelCompleteUI: {fileID: 0}
+  nextSceneName: Level4
   memorySceneName: MemoryGameScene
   positionStart: {fileID: 1958330102}
   positionAfterWave1: {fileID: 558702396}
@@ -3214,11 +3213,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3726047802792864196, guid: 3f6226563e50a574abe1b10bca6b8ba0, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 66.6
+      value: 65.84
       objectReference: {fileID: 0}
     - target: {fileID: 3726047802792864196, guid: 3f6226563e50a574abe1b10bca6b8ba0, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 6.5
+      value: 7.35
       objectReference: {fileID: 0}
     - target: {fileID: 3726047802792864196, guid: 3f6226563e50a574abe1b10bca6b8ba0, type: 3}
       propertyPath: m_LocalPosition.z
@@ -3759,7 +3758,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   textBox: {fileID: 828175483}
-  fullText: 'Crystal: Thank you.'
+  fullText: 'Crystal: Well done.'
   typingSpeed: 0.04
 --- !u!114 &828175483
 MonoBehaviour:
@@ -3781,7 +3780,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Good job.
+  m_text: 
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: c44beed419df6fc49b76eefae7c91a24, type: 2}
   m_sharedMaterial: {fileID: 9051150976177667536, guid: c44beed419df6fc49b76eefae7c91a24, type: 2}
@@ -3909,7 +3908,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   textBox: {fileID: 828704502}
-  fullText: could you help me again?
+  fullText: Ah, yes.
   typingSpeed: 0.04
 --- !u!114 &828704502
 MonoBehaviour:
@@ -3931,7 +3930,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: To find the information you need
+  m_text: 
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: c44beed419df6fc49b76eefae7c91a24, type: 2}
   m_sharedMaterial: {fileID: 9051150976177667536, guid: c44beed419df6fc49b76eefae7c91a24, type: 2}
@@ -4189,7 +4188,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   textBox: {fileID: 914334550}
-  fullText: and I will give you the information
+  fullText: 'that you are looking for '
   typingSpeed: 0.04
 --- !u!114 &914334550
 MonoBehaviour:
@@ -4211,7 +4210,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Oh no.
+  m_text: 
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: c44beed419df6fc49b76eefae7c91a24, type: 2}
   m_sharedMaterial: {fileID: 9051150976177667536, guid: c44beed419df6fc49b76eefae7c91a24, type: 2}
@@ -5947,8 +5946,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Spam A/D to Escape!
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 31cf5d7e30895ea4b853253ebbea6b09, type: 2}
+  m_sharedMaterial: {fileID: 7456610195843353859, guid: 31cf5d7e30895ea4b853253ebbea6b09, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -5972,8 +5971,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 58.33
-  m_fontSizeBase: 58.33
+  m_fontSize: 87.52
+  m_fontSizeBase: 87.52
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -6306,7 +6305,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   textBox: {fileID: 1376991723}
-  fullText: you are looking for.
+  fullText: you must--
   typingSpeed: 0.04
 --- !u!114 &1376991723
 MonoBehaviour:
@@ -6328,7 +6327,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: There's more of them.
+  m_text: 
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: c44beed419df6fc49b76eefae7c91a24, type: 2}
   m_sharedMaterial: {fileID: 9051150976177667536, guid: c44beed419df6fc49b76eefae7c91a24, type: 2}
@@ -6523,7 +6522,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   textBox: {fileID: 1428006320}
-  fullText: Just match the cards with each other.
+  fullText: To find the information
   typingSpeed: 0.04
 --- !u!114 &1428006320
 MonoBehaviour:
@@ -6545,7 +6544,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: you have to--
+  m_text: 
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: c44beed419df6fc49b76eefae7c91a24, type: 2}
   m_sharedMaterial: {fileID: 9051150976177667536, guid: c44beed419df6fc49b76eefae7c91a24, type: 2}
@@ -6787,7 +6786,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1453362966}
   - component: {fileID: 1453362968}
-  - component: {fileID: 1453362967}
   m_Layer: 0
   m_Name: CrystalTimeline1b
   m_TagString: Untagged
@@ -6810,36 +6808,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 104683666}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1453362967
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1453362965}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e52de21a22b6dd44c9cc19f810c65059, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Events:
-    m_Signals:
-    - {fileID: 11400000, guid: c5e341131f7b6ce44b9cfb28443c4d1b, type: 2}
-    m_Events:
-    - m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 104683667}
-          m_TargetAssemblyTypeName: QuestNPC, Assembly-CSharp
-          m_MethodName: StartMemoryGameFromTimeline
-          m_Mode: 1
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
 --- !u!320 &1453362968
 PlayableDirector:
   m_ObjectHideFlags: 0
@@ -6926,7 +6894,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   textBox: {fileID: 1463182683}
-  fullText: 
+  fullText: Oh no. They're back.
   typingSpeed: 0.04
 --- !u!114 &1463182683
 MonoBehaviour:
@@ -6948,7 +6916,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Can you clear them up again?
+  m_text: 
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: c44beed419df6fc49b76eefae7c91a24, type: 2}
   m_sharedMaterial: {fileID: 9051150976177667536, guid: c44beed419df6fc49b76eefae7c91a24, type: 2}
@@ -8267,7 +8235,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   textBox: {fileID: 2062726481}
-  fullText: My memory is kind of messy though...
+  fullText: Now where were we.
   typingSpeed: 0.04
 --- !u!114 &2062726481
 MonoBehaviour:
@@ -8289,7 +8257,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Now I remember.
+  m_text: 
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: c44beed419df6fc49b76eefae7c91a24, type: 2}
   m_sharedMaterial: {fileID: 9051150976177667536, guid: c44beed419df6fc49b76eefae7c91a24, type: 2}

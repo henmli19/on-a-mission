@@ -7,7 +7,7 @@ public class SphereEnemy : Enemy
     public float grabSpeed = 4f;
     public float pullUpForce = 2.5f;
     public int escapePresses = 12;
-    
+
     private bool isGrabbing = false;
     private Vector2 roamTarget;
 
@@ -29,14 +29,12 @@ public class SphereEnemy : Enemy
         else
             Patrol();
 
-        // Hover effect
         float hover = Mathf.Sin(Time.time * 2f) * 0.1f;
         transform.position += new Vector3(0, hover * Time.deltaTime, 0);
     }
 
     protected override void ChasePlayer()
     {
-        // Aim for just above the player's head
         Vector3 target = new Vector3(player.position.x, player.position.y + 0.5f, transform.position.z);
         transform.position = Vector2.MoveTowards(transform.position, target, grabSpeed * Time.deltaTime);
     }
@@ -50,7 +48,6 @@ public class SphereEnemy : Enemy
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        // We use the "Sphere" tag logic here
         if (other.CompareTag("Player") && !isGrabbing)
         {
             Player_Scripts.PlayerMovement pm = other.GetComponent<Player_Scripts.PlayerMovement>();
@@ -67,12 +64,15 @@ public class SphereEnemy : Enemy
         pm.DisableControls();
         pm.StartGrabbingMinigame(escapePresses, this.gameObject);
 
-        BatteryHealthUI health = pm.GetComponent<BatteryHealthUI>();
-        if (health != null) health.TakeDamage(1);
+        // Shield check before dealing grab damage
+        if (!pm.isShielded)
+        {
+            BatteryHealthUI health = pm.GetComponent<BatteryHealthUI>();
+            if (health != null) health.TakeDamage(1);
+        }
 
         while (isGrabbing)
         {
-            // Pull the player up into the air
             transform.position += Vector3.up * pullUpForce * Time.deltaTime;
             pm.transform.position = transform.position + new Vector3(0, -0.7f, 0);
             yield return null;
@@ -84,11 +84,10 @@ public class SphereEnemy : Enemy
         isGrabbing = false;
         pm.StopGrabbingMinigame();
         pm.EnableControls();
-        
-        // Move start position so it doesn't immediately grab again
+
         startPosition = transform.position + Vector3.up * 3f;
         roamTarget = startPosition;
     }
 
-    protected override void Attack() { } 
+    protected override void Attack() { }
 }
