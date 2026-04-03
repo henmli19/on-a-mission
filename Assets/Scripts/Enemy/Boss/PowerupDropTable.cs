@@ -1,15 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-// ─────────────────────────────────────────────────────────────
-//  PowerupDropTable  (ScriptableObject)
-//
-//  Create one via:
-//    Assets → Create → Boss → Powerup Drop Table
-//
-//  Assign your existing powerup prefabs in the Inspector,
-//  each with a weight (higher = more common).
-// ─────────────────────────────────────────────────────────────
 [CreateAssetMenu(fileName = "PowerupDropTable", menuName = "Boss/Powerup Drop Table")]
 public class PowerupDropTable : ScriptableObject
 {
