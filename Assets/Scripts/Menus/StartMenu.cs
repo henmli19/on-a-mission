@@ -5,7 +5,8 @@ public class StartMenu : MonoBehaviour
 {
     
     public GameObject settingsPanel;
-    public GameObject settingsPanel1;
+    public GameObject levelPanel;
+    public GameObject mainMenuPanel;
 
     
     public void StartGame()
@@ -15,13 +16,14 @@ public class StartMenu : MonoBehaviour
     }
     public void OpenLevels()
     {
-        SceneManager.LoadScene("LevelSelect");
+        levelPanel.SetActive(!levelPanel.activeSelf);
+        mainMenuPanel.SetActive(!mainMenuPanel.activeSelf);
     }
 
     public void OpenSettings()
     {
         settingsPanel.SetActive(!settingsPanel.activeSelf);
-        settingsPanel1.SetActive(!settingsPanel1.activeSelf);
+        mainMenuPanel.SetActive(!mainMenuPanel.activeSelf);
 
     }
 
@@ -30,8 +32,8 @@ public class StartMenu : MonoBehaviour
         Application.Quit();
 
       
-#if UNITY_EDITOR
-        UnityEditor.EditorApplication.isPlaying = false;
-#endif
+    #if UNITY_EDITOR
+            UnityEditor.EditorApplication.isPlaying = false;
+    #endif
     }
 }
