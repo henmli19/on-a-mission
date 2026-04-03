@@ -1,13 +1,36 @@
 using UnityEngine;
- 
-public class ParallaxEffect : MonoBehaviour
+using Cinemachine;
+
+public class ParallaxLayer2 : MonoBehaviour
 {
-    public float moveSpeed = 5f;
-    public float parallaxMultiplier = 0.5f;
- 
-    void Update()
+    [Range(0f, 1f)]
+    public float parallaxFactor;
+
+    private Transform cam;
+    private float startPosX;
+
+    void Start()
     {
-        float moveInput = Input.GetAxis("Horizontal");
-        transform.position += Vector3.left * (moveInput * moveSpeed * parallaxMultiplier * Time.deltaTime);
+        cam = Camera.main.transform;
+        startPosX = transform.position.x;
+
+        CinemachineCore.CameraUpdatedEvent.AddListener(OnCameraUpdated);
+    }
+
+    void OnCameraUpdated(CinemachineBrain brain)
+    {
+        float dist = cam.position.x * parallaxFactor;
+        float newX = startPosX + dist;
+
+        transform.position = new Vector3(
+            newX,
+            transform.position.y,
+            transform.position.z
+        );
+    }
+
+    void OnDestroy()
+    {
+        CinemachineCore.CameraUpdatedEvent.RemoveListener(OnCameraUpdated);
     }
 }
