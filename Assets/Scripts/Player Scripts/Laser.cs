@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class Laser : MonoBehaviour
 {
-    [SerializeField] private float lifetime = 30f;
+    [SerializeField] private float lifetime = 5f;
 
     void Start()
     {
@@ -16,5 +16,30 @@ public class Laser : MonoBehaviour
             Destroy(collision.gameObject);
             Destroy(gameObject);
         }
+        if (collision.CompareTag("drone2"))
+        {
+            Destroy(collision.gameObject);
+            Destroy(gameObject);
+        }
+        else if (collision.CompareTag("Sphere"))
+        {
+            Destroy(collision.gameObject);
+            Destroy(gameObject);
+        }
+        else if (collision.CompareTag("Ground"))
+        {
+            Destroy(gameObject);
+        }
+
+        // Hit boss (player lasers)
+        if (collision.CompareTag("Boss"))
+        {
+            BossEnemy boss = collision.GetComponent<BossEnemy>();
+            if (boss != null)
+                boss.TakeDamage(5);
+            Destroy(gameObject);
+        }
     }
 }
+
+

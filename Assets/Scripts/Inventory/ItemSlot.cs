@@ -1,4 +1,6 @@
 using System;
+using System.Linq;
+using Player_Scripts;
 using UnityEngine;
 using TMPro;
 using UnityEngine.EventSystems;
@@ -14,14 +16,14 @@ public class ItemSlot : MonoBehaviour, IPointerClickHandler
     public string itemDescription;
 
     [SerializeField] private int maxNumberOfItems;
-    
+
     public Sprite emptySprite;
-    
+
     //========= ITEM SLOT ============
     [SerializeField] private TMP_Text quantityText;
     [SerializeField] private Image itemImage;
-    
-    
+
+
     //=== ITEM DESCRIPTION SLOT ===
     public Image itemDescriptionImage;
     public TMP_Text itemDescriptionNameText;
@@ -41,17 +43,16 @@ public class ItemSlot : MonoBehaviour, IPointerClickHandler
     {
         // Check if the Slot is full.
         if (isFull) return quantity;
-        
+
         // Update the name
         this.itemName = itemName;
-        
+
         // Update the image
         this.itemSprite = itemSprite;
         itemImage.sprite = itemSprite;
-        
+
         // Update the description
         this.itemDescription = itemDescription;
-        isFull = true;
 
         // Update the quantity
         this.quantity += quantity;
@@ -61,13 +62,13 @@ public class ItemSlot : MonoBehaviour, IPointerClickHandler
             quantityText.text = maxNumberOfItems.ToString();
             quantityText.enabled = true;
             isFull = true;
-            
+
             //RETURN THE LEFTOVERS
             int extraItems = this.quantity - maxNumberOfItems;
             this.quantity = maxNumberOfItems;
             return extraItems;
         }
-        
+
         // Update QUANTITY TEXT
         quantityText.text = this.quantity.ToString();
         quantityText.enabled = true;
@@ -81,6 +82,7 @@ public class ItemSlot : MonoBehaviour, IPointerClickHandler
         {
             OnLeftClick();
         }
+
         if (eventData.button == PointerEventData.InputButton.Right)
         {
             OnRightClick();
@@ -88,18 +90,138 @@ public class ItemSlot : MonoBehaviour, IPointerClickHandler
     }
 
     public void OnLeftClick()
-    { 
-      inventoryManager.DeselectAllSlots();
-      selectedShader.SetActive(true);
-      thisItemSelected = true;
-      itemDescriptionNameText.text = itemName;
-      itemDescriptionText.text = itemDescription;
-      itemDescriptionImage.sprite = itemSprite;
-      if (itemDescriptionImage.sprite == null) itemDescriptionImage.sprite = emptySprite;
+    {
+        inventoryManager.DeselectAllSlots();
+        selectedShader.SetActive(true);
+        thisItemSelected = true;
+        itemDescriptionNameText.text = itemName;
+        itemDescriptionText.text = itemDescription;
+        itemDescriptionImage.sprite = itemSprite;
+        if (itemDescriptionImage.sprite == null) itemDescriptionImage.sprite = emptySprite;
     }
 
     public void OnRightClick()
     {
-        
+        if (itemName == "Speed Boost")
+        {
+            UseSpeedBoost();
+        }
+        else if (itemName == "Shield")
+        {
+            UseShield();
+        }
+        else if (itemName == "Heal"){
+            UseHeal();
     }
+}
+    
+    public PowerUpTimerUI speedTimer;
+    public PowerUpTimerUI shieldTimer;
+    
+    private void UseSpeedBoost()
+    {
+        PlayerMovement robot = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerMovement>();
+
+        if (robot != null)
+        {
+            // Beginn SpeedBoost Coroutine
+            robot.StartCoroutine(robot.ApplySpeedBoost(2f, 5f));
+        }
+
+        // Quantity vom Power Ups reduzieren.
+        quantity--;
+
+        if (quantity <= 0)
+        {
+            ClearSlot();
+        }
+        else
+        {
+            quantityText.text = quantity.ToString();
+        }
+        
+        if (PowerUpTimerUI.SpeedInstance == null)
+        {
+            // Suche nach alle Objekte aktiv und inaktiv
+            PowerUpTimerUI.SpeedInstance = Resources.FindObjectsOfTypeAll<PowerUpTimerUI>().FirstOrDefault(t => !t.isShieldTimer);
+        }
+
+        if (PowerUpTimerUI.SpeedInstance != null)
+        {
+            PowerUpTimerUI.SpeedInstance.gameObject.SetActive(true);
+            PowerUpTimerUI.SpeedInstance.StartTimer();
+        }
+    }
+    
+    private void UseShield()
+    {
+        PlayerMovement robot = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerMovement>();
+
+        if (robot != null)
+        {
+            // Start Coroutine
+            robot.StartCoroutine(robot.ApplyShield(5f));
+        }
+
+        quantity--;
+
+        if (quantity <= 0)
+        {
+            ClearSlot();
+        }
+        else
+        {
+            quantityText.text = quantity.ToString();
+        }
+
+        if (PowerUpTimerUI.ShieldInstance == null)
+        {
+            // Suche nach alle Objekte aktiv und inaktiv
+            PowerUpTimerUI.ShieldInstance = Resources.FindObjectsOfTypeAll<PowerUpTimerUI>().FirstOrDefault(t => t.isShieldTimer);
+        }
+
+        if (PowerUpTimerUI.ShieldInstance != null)
+        {
+            PowerUpTimerUI.ShieldInstance.gameObject.SetActive(true);
+            PowerUpTimerUI.ShieldInstance.StartTimer();
+        }
+    }
+    
+    
+    private void UseHeal()
+    {
+        // Find the health script on the player
+        BatteryHealthUI health = GameObject.FindGameObjectWithTag("Player").GetComponent<BatteryHealthUI>();
+
+        if (health != null)
+        {
+            // Heal for 1 or 2 segments
+            health.Heal(1); 
+        
+            // Remove the item from inventory
+            quantity--;
+
+            if (quantity <= 0)
+            {
+                ClearSlot();
+            }
+            else
+            {
+                quantityText.text = quantity.ToString();
+            }
+        
+            Debug.Log("Player has been healed!");
+        }
+    }
+    
+    public void ClearSlot()
+        {
+            itemName = "";
+            itemDescription = "";
+            itemSprite = emptySprite;
+            itemImage.sprite = emptySprite;
+            isFull = false;
+            quantity = 0;
+            quantityText.enabled = false;
+        }
 }

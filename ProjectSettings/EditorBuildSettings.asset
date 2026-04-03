@@ -6,6 +6,24 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Scenes/MainMenu.unity
+    guid: 68e0d7c368972894894ce0e5a9b4c055
+  - enabled: 1
+    path: Assets/Scenes/Settings.unity
+    guid: dbdcf652f087f2943b95a776a3d38d1e
+  - enabled: 1
     path: Assets/Scenes/TheBunkerScene.unity
-    guid: 8c9cfa26abfee488c85f1582747f6a02
+    guid: bac6ce172a03b654fbf1bc72517129e7
+  - enabled: 1
+    path: Assets/Scenes/TrainingArc.unity
+    guid: 90abfc7dda5eb884aa962c271a1b7381
+  - enabled: 1
+    path: Assets/Scenes/Level3BossFix.unity
+    guid: d8139b72ff53dbb4e8afc6bfd37e7a20
+  - enabled: 1
+    path: Assets/Scenes/MemoryGameScene.unity
+    guid: 2311b2ec87cfd8c449b787918bdcac62
+  - enabled: 1
+    path: Assets/Scenes/Level4Andrea.unity
+    guid: 1313b1caf03335d458030cdb7cc235e5
   m_configObjects: {}

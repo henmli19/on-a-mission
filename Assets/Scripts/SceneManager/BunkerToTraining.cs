@@ -1,16 +1,18 @@
 using UnityEngine;
-using UnityEngine.SceneManagement; // Needed for scene loading
+using UnityEngine.SceneManagement;
 
-public class SceneTrigger : MonoBehaviour
+public class AutoSceneLoader : MonoBehaviour
 {
-    [SerializeField] private string TrainingArc; // Name of the scene to load
+    [SerializeField] private string sceneToLoad;
+    [SerializeField] private float delay = 50f;
 
-    private void OnTriggerEnter2D(Collider2D other)
+    void Start()
     {
-        if (other.CompareTag("Player")) // Only triggers with the player
-        {
-            SceneManager.LoadScene(TrainingArc);
-            
-        }
+        Invoke(nameof(LoadNextScene), delay);
+    }
+
+    void LoadNextScene()
+    {
+        SceneManager.LoadScene(sceneToLoad);
     }
 }

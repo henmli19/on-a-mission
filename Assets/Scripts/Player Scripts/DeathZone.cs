@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class DeathZone : MonoBehaviour
 {
@@ -7,8 +6,7 @@ public class DeathZone : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            // Reloads the current scene
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+            QuitMenu.instance.ShowDeathMenu();
         }
     }
 }

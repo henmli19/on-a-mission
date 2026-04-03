@@ -32,8 +32,8 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2275628015099528975}
-  - {fileID: 6013784343435701431}
   - {fileID: 6784764162825695898}
+  - {fileID: 6013784343435701431}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -62,7 +62,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.392}
+  m_Color: {r: 1, g: 1, b: 1, a: 0.39215687}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -105,6 +105,8 @@ MonoBehaviour:
   itemDescriptionText: {fileID: 0}
   selectedShader: {fileID: 2843181443725423546}
   thisItemSelected: 0
+  speedTimer: {fileID: 0}
+  shieldTimer: {fileID: 0}
 --- !u!1 &2843181443725423546
 GameObject:
   m_ObjectHideFlags: 0

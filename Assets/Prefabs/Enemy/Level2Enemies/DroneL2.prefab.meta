@@ -1,0 +1,11 @@
+fileFormatVersion: 2
+<<<<<<<< HEAD:Assets/Prefabs/Enemy/DroneLaser.prefab.meta
+guid: ed0ab34583b90b042999916d918d7c3f
+========
+guid: d435a81e0edfce84d97d6fcaf523d7ff
+>>>>>>>> origin/NewMergeTest:Assets/Prefabs/Enemy/Level2Enemies/DroneL2.prefab.meta
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
