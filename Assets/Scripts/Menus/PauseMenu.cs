@@ -6,7 +6,7 @@ public class PauseMenu : MonoBehaviour
     public GameObject pausePanel;
 
     public GameObject settingsPanel;
-    public GameObject settingsPanel1;
+
 
     private bool isPaused = false;
 
@@ -50,7 +50,10 @@ public class PauseMenu : MonoBehaviour
 
     public void OpenSettings()
     {
-        settingsPanel.SetActive(!settingsPanel.activeSelf);
-        settingsPanel1.SetActive(!settingsPanel1.activeSelf);
+        
+            settingsPanel.SetActive(!settingsPanel.activeSelf);
+            
+            pausePanel.SetActive(false); 
+        
     }
 }

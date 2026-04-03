@@ -26,7 +26,26 @@ public class QuitMenu : MonoBehaviour
         menuPanel.SetActive(true);
         Time.timeScale = 0f;
 
-      
+        // Disable player completely
+        GameObject player = GameObject.FindGameObjectWithTag("Player");
+        if (player != null)
+        {
+            // Stop all animations
+            Animator anim = player.GetComponent<Animator>();
+            if (anim != null) anim.enabled = false;
+
+            // Disable all monobehaviour scripts on player
+            foreach (MonoBehaviour script in player.GetComponents<MonoBehaviour>())
+                script.enabled = false;
+        }
+
+        // Disable all other UI canvases so inventory etc cant open
+        Canvas[] allCanvases = FindObjectsOfType<Canvas>();
+        foreach (Canvas canvas in allCanvases)
+        {
+            if (canvas.gameObject != menuPanel && !menuPanel.transform.IsChildOf(canvas.transform))
+                canvas.gameObject.SetActive(false);
+        }
     }
 
     void GoToMenu()
