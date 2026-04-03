@@ -12,7 +12,8 @@ public class PauseMenu : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape)&& !settingsPanel.activeInHierarchy && !QuitMenu.instance.menuPanel.activeInHierarchy)
+        if (Input.GetKeyDown(KeyCode.Escape)&& !settingsPanel.activeInHierarchy
+                                            && !QuitMenu.instance.menuPanel.activeInHierarchy)
         {
             if (isPaused)
                 Resume();
@@ -20,8 +21,7 @@ public class PauseMenu : MonoBehaviour
                 Pause();
         }
     }
-
-    // ⏸ Pause game
+    
     void Pause()
     {
         pausePanel.SetActive(true);
@@ -54,3 +54,5 @@ public class PauseMenu : MonoBehaviour
         settingsPanel1.SetActive(!settingsPanel1.activeSelf);
     }
 }
+
+
