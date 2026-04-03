@@ -3091,12 +3091,12 @@ MonoBehaviour:
   attackRange: 10
   playerLayer:
     serializedVersion: 2
-    m_Bits: 8
+    m_Bits: 128
   patrolRadius: 100
   hoverHeight: 1.5
   hoverSpeed: 2
   hoverAmplitude: 0.1
-  moveRadius: 3
+  moveRadius: 10
   moveInterval: 3
   diveSpeed: 40
   returnSpeed: 35

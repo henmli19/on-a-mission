@@ -984,7 +984,7 @@ MonoBehaviour:
   playerLayer:
     serializedVersion: 2
     m_Bits: 128
-  patrolRadius: 3
+  patrolRadius: 7
   grabSpeed: 5
   pullUpForce: 3
   escapePresses: 12

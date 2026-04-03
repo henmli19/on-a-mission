@@ -21,7 +21,7 @@ public class AxeEnemy : Enemy
     protected override void Start()
     {
         base.Start();
-        moveSpeed = 1.5f;
+        moveSpeed = 7f;
         attackRange = 2f;
 
         // Find player if not set
@@ -92,7 +92,7 @@ public class AxeEnemy : Enemy
         moveSpeed = 0;
         yield return new WaitForSeconds(directionChangeDelay);
         Flip();
-        moveSpeed = 1.5f;
+        moveSpeed = 10f;
     }
 
     private void Flip()

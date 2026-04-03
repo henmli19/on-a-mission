@@ -87,7 +87,7 @@ MonoBehaviour:
   playerLayer:
     serializedVersion: 2
     m_Bits: 128
-  patrolRadius: 3
+  patrolRadius: 8
   hoverHeight: 1.5
   hoverSpeed: 2
   hoverAmplitude: 0.1
