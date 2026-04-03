@@ -8,6 +8,34 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1340289083905331357, guid: 718fa8bc8d4e1574089c8ce2af3bf68c, type: 3}
+      propertyPath: grabSpeed
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 1340289083905331357, guid: 718fa8bc8d4e1574089c8ce2af3bf68c, type: 3}
+      propertyPath: moveSpeed
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 1340289083905331357, guid: 718fa8bc8d4e1574089c8ce2af3bf68c, type: 3}
+      propertyPath: attackRange
+      value: 40
+      objectReference: {fileID: 0}
+    - target: {fileID: 1340289083905331357, guid: 718fa8bc8d4e1574089c8ce2af3bf68c, type: 3}
+      propertyPath: pullUpForce
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 1340289083905331357, guid: 718fa8bc8d4e1574089c8ce2af3bf68c, type: 3}
+      propertyPath: patrolRadius
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 1340289083905331357, guid: 718fa8bc8d4e1574089c8ce2af3bf68c, type: 3}
+      propertyPath: detectionRange
+      value: 45
+      objectReference: {fileID: 0}
+    - target: {fileID: 3565342350699690245, guid: 718fa8bc8d4e1574089c8ce2af3bf68c, type: 3}
+      propertyPath: m_Name
+      value: SphereEnemy Variant
+      objectReference: {fileID: 0}
     - target: {fileID: 5916534121739708993, guid: 718fa8bc8d4e1574089c8ce2af3bf68c, type: 3}
       propertyPath: m_Name
       value: SphereEnemy Variant
