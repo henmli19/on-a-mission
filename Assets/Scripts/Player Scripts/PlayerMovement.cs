@@ -47,7 +47,6 @@ namespace Player_Scripts
 
         void Update()
         {
-            audioSource.PlayOneShot(MUSIC);
 
             if (beingGrabbed)
             {

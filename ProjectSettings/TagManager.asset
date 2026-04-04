@@ -12,6 +12,7 @@ TagManager:
   - Powerups
   - border
   - Laser
+  - Obstacle
   layers:
   - Default
   - TransparentFX
