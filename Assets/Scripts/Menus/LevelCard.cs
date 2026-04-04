@@ -21,7 +21,7 @@ public class LevelCard : MonoBehaviour
     private Coroutine videoTimer;
     private RenderTexture renderTexture;
 
-    private void Awake()
+    private void Start()
     {
         rectTransform = GetComponent<RectTransform>();
         originalScale = rectTransform.localScale;
@@ -33,8 +33,9 @@ public class LevelCard : MonoBehaviour
         videoPlayer.audioOutputMode = VideoAudioOutputMode.None;
         videoPlayer.clip = hoverClip;
 
-        Rect r = rectTransform.rect;
-        renderTexture = new RenderTexture(Mathf.Max(1, (int)Mathf.Abs(r.width)), Mathf.Max(1, (int)Mathf.Abs(r.height)), 0);
+        int width = (int)hoverClip.width;
+        int height = (int)hoverClip.height;
+        renderTexture = new RenderTexture(width, height, 0);
         videoPlayer.targetTexture = renderTexture;
         videoOverlay.texture = renderTexture;
         videoOverlay.gameObject.SetActive(false);
