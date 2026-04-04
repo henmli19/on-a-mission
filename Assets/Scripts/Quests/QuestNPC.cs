@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.Playables;
 using UnityEngine.SceneManagement;
 using TMPro;
+using Player_Scripts;
 
 public class QuestNPC : MonoBehaviour
 {
@@ -26,7 +27,7 @@ public class QuestNPC : MonoBehaviour
     public int totalEnemies = 10;
 
     [Header("Level Complete")]
-    public string nextSceneName = "Level4"; // scene to load after level is done
+    public string nextSceneName = "Level4";
 
     [Header("Memory Minigame")]
     public string memorySceneName = "MemoryGame";
@@ -52,7 +53,7 @@ public class QuestNPC : MonoBehaviour
         Wave1Active,
         Wave1Complete,
         MinigameActive,
-        MinigameComplete,   // prevents re-triggering Phase1 after minigame
+        MinigameComplete,
         Wave2Active,
         Wave2Complete,
         LevelComplete
@@ -63,11 +64,13 @@ public class QuestNPC : MonoBehaviour
     private int activeEnemies = 0;
     private bool timelinePlaying = false;
     private Transform player;
+    private PlayerMovement playerMovement;
 
-    // ─────────────────────────────────────────
     private void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player")?.transform;
+        if (player != null)
+            playerMovement = player.GetComponent<PlayerMovement>();
 
         if (npcVisual != null)
             npcVisual.SetActive(true);
@@ -78,7 +81,6 @@ public class QuestNPC : MonoBehaviour
         UpdateKillCounter();
     }
 
-    // ─────────────────────────────────────────
     private void Update()
     {
         if (player == null || timelinePlaying)
@@ -96,10 +98,8 @@ public class QuestNPC : MonoBehaviour
         return currentPhase == QuestPhase.NotStarted
             || currentPhase == QuestPhase.Wave1Complete
             || currentPhase == QuestPhase.Wave2Complete;
-        // MinigameComplete intentionally excluded — prevents Phase1 re-trigger
     }
 
-    // ─────────────────────────────────────────
     private void OnPlayerInteract()
     {
         switch (currentPhase)
@@ -107,15 +107,29 @@ public class QuestNPC : MonoBehaviour
             case QuestPhase.NotStarted:
                 StartCoroutine(Phase0Sequence());
                 break;
-
             case QuestPhase.Wave1Complete:
                 StartCoroutine(Phase1Sequence());
                 break;
-
             case QuestPhase.Wave2Complete:
                 StartCoroutine(Phase2Sequence());
                 break;
         }
+    }
+
+    // ── Helper: play a timeline and wait for it to finish ──
+    private IEnumerator PlayTimeline(PlayableDirector timeline)
+    {
+        if (timeline == null) yield break;
+        timeline.Play();
+        yield return new WaitForSeconds((float)timeline.duration);
+        // Don't call Stop() — it kills end signals
+    }
+
+    // ── Helper: re-enable player controls after a timeline ──
+    private void RestorePlayerControls()
+    {
+        if (playerMovement != null)
+            playerMovement.EnableControls();
     }
 
     // ───── PHASE 0: Dialogue → Spawn Wave 1 ─────
@@ -123,14 +137,16 @@ public class QuestNPC : MonoBehaviour
     {
         timelinePlaying = true;
 
-        if (phase0Timeline != null)
-        {
-            phase0Timeline.Play();
-            yield return null; // wait one frame for the timeline to actually start
-            yield return new WaitUntil(() => phase0Timeline.state != PlayState.Playing);
-        }
+        yield return StartCoroutine(PlayTimeline(phase0Timeline));
+
+        // Re-enable controls in case end signal didn't fire
+        RestorePlayerControls();
 
         timelinePlaying = false;
+
+        // ✓ Checkpoint after first cutscene
+        CheckpointManager.Instance?.SetCheckpoint(player.position);
+
         currentPhase = QuestPhase.Wave1Active;
         SpawnWave();
     }
@@ -140,28 +156,19 @@ public class QuestNPC : MonoBehaviour
     {
         timelinePlaying = true;
 
-        // 1. Pre-minigame dialogue
-        if (phase1Timeline != null)
-        {
-            phase1Timeline.Play();
-            yield return new WaitUntil(() => phase1Timeline.state != PlayState.Playing);
-        }
+        yield return StartCoroutine(PlayTimeline(phase1Timeline));
+        RestorePlayerControls();
 
-        // 2. Hide game UI and background
+        // Hide game UI and background before minigame
         if (gameUI != null) gameUI.SetActive(false);
         if (gameBackground != null) gameBackground.SetActive(false);
 
-        // 3. Load minigame additively
         currentPhase = QuestPhase.MinigameActive;
         yield return SceneManager.LoadSceneAsync(memorySceneName, LoadSceneMode.Additive);
-
-        // 4. Wait for CardController to call OnMinigameComplete()
         yield return new WaitUntil(() => currentPhase == QuestPhase.MinigameComplete);
-
-        // 5. Unload minigame
         yield return SceneManager.UnloadSceneAsync(memorySceneName);
 
-        // 6. Restore UI, background and camera
+        // Restore UI, background and camera
         if (gameUI != null) gameUI.SetActive(true);
         if (gameBackground != null) gameBackground.SetActive(true);
 
@@ -172,21 +179,15 @@ public class QuestNPC : MonoBehaviour
         }
         Camera.main?.gameObject.SetActive(true);
 
-        // 7. Post-minigame dialogue — NPC continues talking
-        if (phase1bTimeline != null)
-        {
-            phase1bTimeline.Play();
-            yield return new WaitUntil(() => phase1bTimeline.state != PlayState.Playing);
-        }
-        else
-        {
-            Debug.LogWarning("QuestNPC: phase1bTimeline not assigned, skipping post-minigame dialogue.");
-            yield return new WaitForSeconds(1f);
-        }
+        // Post-minigame dialogue
+        yield return StartCoroutine(PlayTimeline(phase1bTimeline));
+        RestorePlayerControls();
 
         timelinePlaying = false;
 
-        // 8. Short delay then spawn wave 2
+        // ✓ Checkpoint after minigame + dialogue
+        CheckpointManager.Instance?.SetCheckpoint(player.position);
+
         yield return new WaitForSeconds(1f);
         currentPhase = QuestPhase.Wave2Active;
         SpawnWave();
@@ -197,11 +198,8 @@ public class QuestNPC : MonoBehaviour
     {
         timelinePlaying = true;
 
-        if (phase2Timeline != null)
-        {
-            phase2Timeline.Play();
-            yield return new WaitUntil(() => phase2Timeline.state != PlayState.Playing);
-        }
+        yield return StartCoroutine(PlayTimeline(phase2Timeline));
+        RestorePlayerControls();
 
         timelinePlaying = false;
         currentPhase = QuestPhase.LevelComplete;
@@ -212,13 +210,11 @@ public class QuestNPC : MonoBehaviour
             Debug.LogWarning("QuestNPC: nextSceneName is not set in the Inspector!");
     }
 
-    // ───── Called by CardController when minigame is complete ─────
     public void OnMinigameComplete()
     {
         currentPhase = QuestPhase.MinigameComplete;
     }
 
-    // ───── ENEMY SPAWNING ─────
     private void SpawnWave()
     {
         if (enemyPrefabs == null || enemyPrefabs.Length == 0)
@@ -242,7 +238,6 @@ public class QuestNPC : MonoBehaviour
                 spawnPoint.position,
                 Quaternion.identity
             );
-            // No scale override — prefab sizes used as-is
 
             QuestEnemy qe = enemy.GetComponent<QuestEnemy>();
             if (qe == null) qe = enemy.AddComponent<QuestEnemy>();
@@ -251,7 +246,6 @@ public class QuestNPC : MonoBehaviour
         }
     }
 
-    // ───── Called by QuestEnemy when it dies ─────
     public void OnQuestEnemyKilled()
     {
         totalKills++;
@@ -277,14 +271,12 @@ public class QuestNPC : MonoBehaviour
         }
     }
 
-    // ───── Kill Counter UI ─────
     private void UpdateKillCounter()
     {
         if (killCounterText != null)
             killCounterText.text = $"[{totalKills}/{totalEnemies}] Enemies killed";
     }
 
-    // ───── Gizmos ─────
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.green;

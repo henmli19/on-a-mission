@@ -7,7 +7,7 @@ public class QuitMenu : MonoBehaviour
     public static QuitMenu instance;
     public GameObject menuPanel;
     public Button menuButton;
-    public Button restartButton;
+    public Button continueButton;
 
     void Awake()
     {
@@ -18,34 +18,13 @@ public class QuitMenu : MonoBehaviour
     private void Start()
     {
         menuButton.onClick.AddListener(GoToMenu);
-        restartButton.onClick.AddListener(Restart);
+        continueButton.onClick.AddListener(Continue);
     }
 
     public void ShowDeathMenu()
     {
-        menuPanel.SetActive(true);
         Time.timeScale = 0f;
-
-        // Disable player completely
-        GameObject player = GameObject.FindGameObjectWithTag("Player");
-        if (player != null)
-        {
-            // Stop all animations
-            Animator anim = player.GetComponent<Animator>();
-            if (anim != null) anim.enabled = false;
-
-            // Disable all monobehaviour scripts on player
-            foreach (MonoBehaviour script in player.GetComponents<MonoBehaviour>())
-                script.enabled = false;
-        }
-
-        // Disable all other UI canvases so inventory etc cant open
-        Canvas[] allCanvases = FindObjectsOfType<Canvas>();
-        foreach (Canvas canvas in allCanvases)
-        {
-            if (canvas.gameObject != menuPanel && !menuPanel.transform.IsChildOf(canvas.transform))
-                canvas.gameObject.SetActive(false);
-        }
+        menuPanel.SetActive(true);
     }
 
     void GoToMenu()
@@ -54,9 +33,14 @@ public class QuitMenu : MonoBehaviour
         SceneManager.LoadScene("MainMenu");
     }
 
-    public void Restart()
+    void Continue()
     {
         Time.timeScale = 1f;
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        menuPanel.SetActive(false);
+
+        if (CheckpointManager.Instance != null)
+            CheckpointManager.Instance.RespawnPlayer();
+        else
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 }
