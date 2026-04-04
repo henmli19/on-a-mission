@@ -68,6 +68,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Capsulelvl2 Variant
       objectReference: {fileID: 0}
+    - target: {fileID: 7429275734304652944, guid: e769b3d882cf4ce4e8a9d06d840e1874, type: 3}
+      propertyPath: m_Layer
+      value: 19
+      objectReference: {fileID: 0}
+    - target: {fileID: 7429275734304652944, guid: e769b3d882cf4ce4e8a9d06d840e1874, type: 3}
+      propertyPath: m_TagString
+      value: Laser
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

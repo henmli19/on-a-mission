@@ -11,6 +11,7 @@ TagManager:
   - drone2
   - Powerups
   - border
+  - Laser
   layers:
   - Default
   - TransparentFX

@@ -1618,17 +1618,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHealth: 100
-  moveSpeed: 50
+  moveSpeed: 5
   damage: 10
   detectionRange: 40
   attackRange: 35
   playerLayer:
     serializedVersion: 2
     m_Bits: 128
-  patrolRadius: 100
-  hoverHeight: 1.5
+  patrolRadius: 50
+  hoverHeight: 2
   hoverSpeed: 2
-  hoverAmplitude: 0.1
+  hoverAmplitude: 1
   moveRadius: 70
   moveInterval: 3
   diveSpeed: 40
