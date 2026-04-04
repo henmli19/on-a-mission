@@ -1,4 +1,5 @@
 using UnityEngine;
+using Player_Scripts;
 
 public class LaserProjectile : MonoBehaviour
 {
@@ -27,11 +28,18 @@ public class LaserProjectile : MonoBehaviour
         transform.Translate(direction * (speed * Time.deltaTime), Space.World);
     }
 
-    // This is what was missing — actually deal damage on hit
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.CompareTag("Player"))
         {
+            // Check shield before dealing damage
+            PlayerMovement pm = other.GetComponent<PlayerMovement>();
+            if (pm != null && pm.isShielded)
+            {
+                Destroy(gameObject); // laser still disappears on hit
+                return;
+            }
+
             BatteryHealthUI health = other.GetComponent<BatteryHealthUI>();
             if (health != null)
                 health.TakeDamage(damage);

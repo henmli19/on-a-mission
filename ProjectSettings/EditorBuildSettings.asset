@@ -18,7 +18,7 @@ EditorBuildSettings:
     path: Assets/Scenes/TrainingArc.unity
     guid: 90abfc7dda5eb884aa962c271a1b7381
   - enabled: 1
-    path: Assets/Scenes/Level3BossFix.unity
+    path: Assets/Scenes/Level3.unity
     guid: d8139b72ff53dbb4e8afc6bfd37e7a20
   - enabled: 1
     path: Assets/Scenes/MemoryGameScene.unity
