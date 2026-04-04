@@ -13,9 +13,9 @@ GameObject:
   - component: {fileID: 3507798473729804070}
   - component: {fileID: 1309770758664654930}
   - component: {fileID: 1369778591516948520}
-  m_Layer: 7
+  m_Layer: 19
   m_Name: Capsule
-  m_TagString: Untagged
+  m_TagString: Laser
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

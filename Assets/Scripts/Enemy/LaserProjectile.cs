@@ -38,5 +38,16 @@ public class LaserProjectile : MonoBehaviour
 
             Destroy(gameObject);
         }
+
+        if (other.CompareTag("Ground"))
+        {
+            Destroy(gameObject);
+        }
+
+        if (other.CompareTag("Laser"))
+        {
+            Destroy(gameObject);
+            Destroy(other.gameObject);
+        }
     }
 }
