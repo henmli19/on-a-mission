@@ -20836,6 +20836,8 @@ RectTransform:
   m_Pivot: {x: 0, y: 0}
 --- !u!4 &2085932907 stripped
 Transform:
+  m_CorrespondingSourceObject: {fileID: 3726047802792864196, guid: 3f6226563e50a574abe1b10bca6b8ba0, type: 3}
+  m_PrefabInstance: {fileID: 962114318}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &2087769055
 GameObject:
