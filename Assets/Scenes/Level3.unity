@@ -1174,9 +1174,9 @@ MonoBehaviour:
   phase1bTimeline: {fileID: 1453362968}
   phase2Timeline: {fileID: 1379523933}
   enemyPrefabs:
-  - {fileID: 5832862938843244839, guid: d435a81e0edfce84d97d6fcaf523d7ff, type: 3}
+  - {fileID: 7288901794087612080, guid: dcf55583c715e644781648536aec6560, type: 3}
   - {fileID: 5667532948864283936, guid: d1d085921047fca40bf9daeb1c6950fb, type: 3}
-  - {fileID: 5916534121739708993, guid: b4c1f140f6501da4898f28de3741e7f7, type: 3}
+  - {fileID: 4112480990989918929, guid: f42aeb1c635d8b74c9c195596a812d9d, type: 3}
   - {fileID: 637343478016858820, guid: 4690403cf3202e644a1131a64d26d173, type: 3}
   spawnPoints:
   - {fileID: 2113158927}

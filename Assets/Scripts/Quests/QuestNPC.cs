@@ -126,6 +126,7 @@ public class QuestNPC : MonoBehaviour
         if (phase0Timeline != null)
         {
             phase0Timeline.Play();
+            yield return null; // wait one frame for the timeline to actually start
             yield return new WaitUntil(() => phase0Timeline.state != PlayState.Playing);
         }
 
