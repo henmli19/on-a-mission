@@ -93,7 +93,7 @@ public class GameManager : MonoBehaviour
 
             if (milliseconds < 500)
                 Pass(milliseconds, "Outrageous");
-            else if (milliseconds < 700)
+            else if (milliseconds < 800)
                 Pass(milliseconds, "Average");
             else
             {
