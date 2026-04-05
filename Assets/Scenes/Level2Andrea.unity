@@ -20105,6 +20105,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 74772281360780215, guid: 7b7781b3bd177844fb65ac977499bc0d, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3099062874033488951, guid: 7b7781b3bd177844fb65ac977499bc0d, type: 3}
+      propertyPath: m_text
+      value: Do you wish to continue from last checkpoint?
+      objectReference: {fileID: 0}
+    - target: {fileID: 3099062874033488951, guid: 7b7781b3bd177844fb65ac977499bc0d, type: 3}
+      propertyPath: m_HorizontalAlignment
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 3365048901148404782, guid: 7b7781b3bd177844fb65ac977499bc0d, type: 3}
       propertyPath: m_LocalPosition.x
       value: 5.6331887

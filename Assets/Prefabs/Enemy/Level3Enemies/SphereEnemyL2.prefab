@@ -522,7 +522,7 @@ MonoBehaviour:
   maxHealth: 100
   moveSpeed: 2
   damage: 1
-  detectionRange: 25
+  detectionRange: 30
   attackRange: 20
   playerLayer:
     serializedVersion: 2

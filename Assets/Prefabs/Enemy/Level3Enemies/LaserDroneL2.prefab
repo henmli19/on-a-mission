@@ -83,8 +83,8 @@ MonoBehaviour:
   maxHealth: 100
   moveSpeed: 2
   damage: 5
-  detectionRange: 10
-  attackRange: 10
+  detectionRange: 50
+  attackRange: 30
   playerLayer:
     serializedVersion: 2
     m_Bits: 128
