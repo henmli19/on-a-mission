@@ -821,7 +821,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   menuPanel: {fileID: 74772281360780215}
   menuButton: {fileID: 5413056416128548664}
-  restartButton: {fileID: 5035543856303800123}
+  continueButton: {fileID: 5035543856303800123}
 --- !u!1 &3342974120297673113
 GameObject:
   m_ObjectHideFlags: 0
@@ -1304,7 +1304,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Do you wish to restart ?
+  m_text: Do you want to continue from last checkpoint?
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 4606cc88164713246b92a75b1509c30d, type: 2}
   m_sharedMaterial: {fileID: 3854776251294212542, guid: 4606cc88164713246b92a75b1509c30d, type: 2}
@@ -1338,7 +1338,7 @@ MonoBehaviour:
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
-  m_HorizontalAlignment: 1
+  m_HorizontalAlignment: 2
   m_VerticalAlignment: 256
   m_textAlignment: 65535
   m_characterSpacing: 0

@@ -64,9 +64,11 @@ public class BossHealthBar : MonoBehaviour
     // ─────────────────────────────────────────
     public void SetHealth(float health)
     {
+        // Don't do anything if the bar is already hidden
+        if (!gameObject.activeInHierarchy) return;
+
         currentHealth = Mathf.Clamp(health, 0, maxHealth);
 
-        // Stop any running flash and restart it so rapid hits don't get stuck on white
         if (flashCoroutine != null)
             StopCoroutine(flashCoroutine);
         flashCoroutine = StartCoroutine(HitFlash());

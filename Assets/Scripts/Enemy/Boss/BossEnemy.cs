@@ -467,6 +467,8 @@ public class BossEnemy : Enemy
     // ─────────────────────────────────────────
     public override void TakeDamage(float amount)
     {
+        if (isDead) return; 
+
         base.TakeDamage(amount);
         if (bossHealthBar != null)
             bossHealthBar.SetHealth(currentHealth);

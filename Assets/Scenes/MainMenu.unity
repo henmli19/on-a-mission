@@ -1562,7 +1562,7 @@ MonoBehaviour:
   volumeSlider: {fileID: 2075521793}
   testAudio: {fileID: 0}
   menuButton: {fileID: 1761612006}
-  resumeButton: {fileID: 0}
+  resumeButton: {fileID: 1761612006}
   settingsPanel: {fileID: 658840320}
   pausePanel: {fileID: -8653719598885068355, guid: b2065b2494f873546b2f29b08ff2c4b5, type: 3}
 --- !u!1 &662637463
