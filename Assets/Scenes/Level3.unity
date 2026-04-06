@@ -2822,6 +2822,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 8300000, guid: 265d97cf06c98844a81b5f78cfeeaf2e, type: 3}
     - target: {fileID: 7655875253064583641, guid: 1d2b6593cdfa95a4ba368c334d98e6eb, type: 3}
+      propertyPath: landSound
+      value: 
+      objectReference: {fileID: 8300000, guid: 414eaf2c6c4bcca4097a64704e04759a, type: 3}
+    - target: {fileID: 7655875253064583641, guid: 1d2b6593cdfa95a4ba368c334d98e6eb, type: 3}
       propertyPath: moveSpeed
       value: 7
       objectReference: {fileID: 0}

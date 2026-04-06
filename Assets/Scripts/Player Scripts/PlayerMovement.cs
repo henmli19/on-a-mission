@@ -13,7 +13,7 @@ namespace Player_Scripts
 
         [SerializeField] private float jumpForce = 4.8f;
         
-        private bool canDash=true;
+        private bool canDash = true;
         private bool isDashing;
         [SerializeField] private float dashingPower = 24f;
         [SerializeField] private float dashingTime = 0.2f;
@@ -35,11 +35,15 @@ namespace Player_Scripts
         [Header("Sound Effects")]
         [SerializeField] private AudioSource audioSource;
         [SerializeField] private AudioClip jumpSound;
+        [SerializeField] private AudioClip landSound;   // ← assign landing sound in Inspector
         [SerializeField] private AudioClip dashSound;
         [SerializeField] private AudioClip walkingSound;
         [SerializeField] private AudioClip pickupSound;
         [SerializeField] private AudioClip MUSIC;
-        
+
+        // tracks whether the player was in the air last frame
+        private bool wasInAir = false;
+
         void Start()
         {
             rb = GetComponent<Rigidbody2D>();
@@ -47,7 +51,6 @@ namespace Player_Scripts
 
         void Update()
         {
-
             if (beingGrabbed)
             {
                 HandleGrabSpam();
@@ -60,13 +63,13 @@ namespace Player_Scripts
             if (!inputEnabled)
             {
                 rb.velocity = new Vector2(0, rb.velocity.y);
-                return; // ← HandleMovement AND HandleJump both skip now
+                return;
             }
 
             if (!isDashing)
                 HandleMovement();
 
-            HandleJump(); // ← only runs when inputEnabled = true
+            HandleJump();
 
             if (Input.GetKeyDown(KeyCode.LeftShift) && canDash)
             {
@@ -79,7 +82,6 @@ namespace Player_Scripts
             inputEnabled = false;
             rb.velocity = Vector2.zero;
 
-            // ← Reset animator so running/jumping don't stay stuck
             _Animator.SetBool("isRunning", false);
             _Animator.SetBool("isJumping", false);
             _Animator.CrossFade("Idle_Animation", 0.15f);
@@ -103,7 +105,6 @@ namespace Player_Scripts
             else
             {
                 _Animator.SetBool("isRunning", false);
-                audioSource.Stop();
             }
 
             if (horizontal > 0)
@@ -119,14 +120,23 @@ namespace Player_Scripts
                 audioSource.PlayOneShot(jumpSound);
                 rb.velocity = new Vector2(rb.velocity.x, jumpForce);
                 isGrounded = false;
+                wasInAir = true; // mark that we left the ground
             }
 
             if (isGrounded)
             {
+                // Just landed — was in the air last frame, now grounded
+                if (wasInAir)
+                {
+                    audioSource.PlayOneShot(landSound);
+                    wasInAir = false;
+                }
+
                 _Animator.SetBool("isJumping", false);
             }
             else
             {
+                wasInAir = true; // still in the air
                 _Animator.SetBool("isJumping", true);
                 Debug.Log("isJumping = " + _Animator.GetBool("isJumping"));
             }

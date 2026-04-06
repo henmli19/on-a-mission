@@ -2849,8 +2849,9 @@ MonoBehaviour:
   isShielded: 0
   audioSource: {fileID: 0}
   jumpSound: {fileID: 0}
+  landSound: {fileID: 0}
   dashSound: {fileID: 0}
-  walkingSound: {fileID: 0}
+  walkingSound: {fileID: 8300000, guid: dc3b40f5e250d014db73f1e5539ffb05, type: 3}
   pickupSound: {fileID: 0}
   MUSIC: {fileID: 0}
   grabMessageUI: {fileID: 0}
