@@ -16,6 +16,10 @@ public class QuestNPC : MonoBehaviour
     public PlayableDirector phase1Timeline;
     public PlayableDirector phase1bTimeline;
     public PlayableDirector phase2Timeline;
+    public PlayableDirector phase2OutroTimeline;
+
+    [Header("Canvases")]
+    public GameObject phase2OutroCanvas;
 
     [Header("Enemy Spawning")]
     public GameObject[] enemyPrefabs;
@@ -78,6 +82,9 @@ public class QuestNPC : MonoBehaviour
         if (positionStart != null)
             transform.position = positionStart.position;
 
+        if (phase2OutroCanvas != null)
+            phase2OutroCanvas.SetActive(false);
+
         UpdateKillCounter();
     }
 
@@ -116,16 +123,13 @@ public class QuestNPC : MonoBehaviour
         }
     }
 
-    // ── Helper: play a timeline and wait for it to finish ──
     private IEnumerator PlayTimeline(PlayableDirector timeline)
     {
         if (timeline == null) yield break;
         timeline.Play();
         yield return new WaitForSeconds((float)timeline.duration);
-        // Don't call Stop() — it kills end signals
     }
 
-    // ── Helper: re-enable player controls after a timeline ──
     private void RestorePlayerControls()
     {
         if (playerMovement != null)
@@ -138,13 +142,10 @@ public class QuestNPC : MonoBehaviour
         timelinePlaying = true;
 
         yield return StartCoroutine(PlayTimeline(phase0Timeline));
-
-        // Re-enable controls in case end signal didn't fire
         RestorePlayerControls();
 
         timelinePlaying = false;
 
-        // ✓ Checkpoint after first cutscene
         CheckpointManager.Instance?.SetCheckpoint(player.position);
 
         currentPhase = QuestPhase.Wave1Active;
@@ -159,7 +160,6 @@ public class QuestNPC : MonoBehaviour
         yield return StartCoroutine(PlayTimeline(phase1Timeline));
         RestorePlayerControls();
 
-        // Hide game UI and background before minigame
         if (gameUI != null) gameUI.SetActive(false);
         if (gameBackground != null) gameBackground.SetActive(false);
 
@@ -168,7 +168,6 @@ public class QuestNPC : MonoBehaviour
         yield return new WaitUntil(() => currentPhase == QuestPhase.MinigameComplete);
         yield return SceneManager.UnloadSceneAsync(memorySceneName);
 
-        // Restore UI, background and camera
         if (gameUI != null) gameUI.SetActive(true);
         if (gameBackground != null) gameBackground.SetActive(true);
 
@@ -179,13 +178,11 @@ public class QuestNPC : MonoBehaviour
         }
         Camera.main?.gameObject.SetActive(true);
 
-        // Post-minigame dialogue
         yield return StartCoroutine(PlayTimeline(phase1bTimeline));
         RestorePlayerControls();
 
         timelinePlaying = false;
 
-        // ✓ Checkpoint after minigame + dialogue
         CheckpointManager.Instance?.SetCheckpoint(player.position);
 
         yield return new WaitForSeconds(1f);
@@ -193,12 +190,17 @@ public class QuestNPC : MonoBehaviour
         SpawnWave();
     }
 
-    // ───── PHASE 2: Dialogue → Load Next Level ─────
+    // ───── PHASE 2: Dialogue → Outro Cutscene → Load Next Level ─────
     private IEnumerator Phase2Sequence()
     {
         timelinePlaying = true;
 
         yield return StartCoroutine(PlayTimeline(phase2Timeline));
+        RestorePlayerControls();
+
+        if (phase2OutroCanvas != null) phase2OutroCanvas.SetActive(true);
+        yield return StartCoroutine(PlayTimeline(phase2OutroTimeline));
+        if (phase2OutroCanvas != null) phase2OutroCanvas.SetActive(false);
         RestorePlayerControls();
 
         timelinePlaying = false;

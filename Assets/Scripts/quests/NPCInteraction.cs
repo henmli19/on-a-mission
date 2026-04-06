@@ -8,11 +8,13 @@ public class NPCQuestDialogue : MonoBehaviour
     public PlayableDirector introTimeline;
     public PlayableDirector returnWithItemTimeline;
     public PlayableDirector returnWithoutItemTimeline;
+    public PlayableDirector postItemCutsceneTimeline;
 
     [Header("Canvases")]
     public GameObject firstTimeCanvas;
     public GameObject withItemCanvas;
     public GameObject withoutItemCanvas;
+    public GameObject postItemCanvas;
 
     [Header("Settings")]
     public string requiredItemName = "Energy Core";
@@ -26,18 +28,18 @@ public class NPCQuestDialogue : MonoBehaviour
         firstTimeCanvas.SetActive(false);
         withItemCanvas.SetActive(false);
         withoutItemCanvas.SetActive(false);
+        postItemCanvas.SetActive(false);
 
         introTimeline.stopped += OnCutsceneFinished;
         returnWithItemTimeline.stopped += OnCutsceneFinished;
         returnWithoutItemTimeline.stopped += OnCutsceneFinished;
+        postItemCutsceneTimeline.stopped += OnCutsceneFinished;
     }
 
     void Update()
     {
         if (playerNearby && Input.GetKeyDown(KeyCode.E) && !isPlaying)
-        {
             PlayCorrectTimeline();
-        }
     }
 
     void PlayCorrectTimeline()
@@ -76,10 +78,16 @@ public class NPCQuestDialogue : MonoBehaviour
         firstTimeCanvas.SetActive(false);
         withItemCanvas.SetActive(false);
         withoutItemCanvas.SetActive(false);
+        postItemCanvas.SetActive(false);
         isPlaying = false;
 
-        // If the timeline that just finished was the "with item" one, load next scene
         if (pd == returnWithItemTimeline)
+        {
+            isPlaying = true;
+            postItemCanvas.SetActive(true);
+            postItemCutsceneTimeline.Play();
+        }
+        else if (pd == postItemCutsceneTimeline)
         {
             SceneManager.LoadScene(nextSceneName);
         }
@@ -100,14 +108,12 @@ public class NPCQuestDialogue : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.CompareTag("Player"))
-            playerNearby = true;
+        if (collision.CompareTag("Player")) playerNearby = true;
     }
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-        if (collision.CompareTag("Player"))
-            playerNearby = false;
+        if (collision.CompareTag("Player")) playerNearby = false;
     }
 
     void OnDestroy()
@@ -115,5 +121,6 @@ public class NPCQuestDialogue : MonoBehaviour
         introTimeline.stopped -= OnCutsceneFinished;
         returnWithItemTimeline.stopped -= OnCutsceneFinished;
         returnWithoutItemTimeline.stopped -= OnCutsceneFinished;
+        postItemCutsceneTimeline.stopped -= OnCutsceneFinished;
     }
 }

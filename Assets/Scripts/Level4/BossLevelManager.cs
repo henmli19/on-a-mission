@@ -17,6 +17,7 @@ public class BossLevelManager : MonoBehaviour
     public KeyCode interactKey = KeyCode.E;
     public float interactRange = 2f;
     public PlayableDirector npcTimeline;
+    public GameObject npcCanvas;
 
     private enum LevelPhase
     {
@@ -46,6 +47,9 @@ public class BossLevelManager : MonoBehaviour
         if (npcObject != null)
             npcObject.SetActive(false);
 
+        if (npcCanvas != null)
+            npcCanvas.SetActive(false);
+
         StartCoroutine(LevelSequence());
     }
 
@@ -62,16 +66,13 @@ public class BossLevelManager : MonoBehaviour
             StartCoroutine(NPCTalkSequence());
     }
 
-    // ── Helper: play a timeline and wait for it to finish ──
     private IEnumerator PlayTimeline(PlayableDirector timeline)
     {
         if (timeline == null) yield break;
         timeline.Play();
         yield return new WaitForSeconds((float)timeline.duration);
-        // Don't call Stop() — it kills end signals
     }
 
-    // ── Helper: re-enable player controls after a timeline ──
     private void RestorePlayerControls()
     {
         if (playerMovement != null)
@@ -89,7 +90,6 @@ public class BossLevelManager : MonoBehaviour
 
         timelinePlaying = false;
 
-        // ✓ Checkpoint after intro — respawn here during boss fight
         CheckpointManager.Instance?.SetCheckpoint(player.position);
 
         // ── PHASE 2: Activate Boss ──
@@ -123,7 +123,6 @@ public class BossLevelManager : MonoBehaviour
 
         timelinePlaying = false;
 
-        // ✓ Checkpoint after post-boss dialogue
         CheckpointManager.Instance?.SetCheckpoint(player.position);
 
         // ── PHASE 4: Show NPC ──
@@ -140,7 +139,10 @@ public class BossLevelManager : MonoBehaviour
         timelinePlaying = true;
         currentPhase = LevelPhase.NPCTalking;
 
+        if (npcCanvas != null) npcCanvas.SetActive(true);
         yield return StartCoroutine(PlayTimeline(npcTimeline));
+        if (npcCanvas != null) npcCanvas.SetActive(false);
+
         RestorePlayerControls();
 
         timelinePlaying = false;
