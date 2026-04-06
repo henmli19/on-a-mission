@@ -1,6 +1,8 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Playables;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 using Player_Scripts;
 
 public class BossLevelManager : MonoBehaviour
@@ -17,7 +19,17 @@ public class BossLevelManager : MonoBehaviour
     public KeyCode interactKey = KeyCode.E;
     public float interactRange = 2f;
     public PlayableDirector npcTimeline;
-    public GameObject npcCanvas;
+    public GameObject npcCanvas; // ← kept exactly as you had it
+
+    // ── NEW: Credits ──────────────────────────
+    [Header("Credits")]
+    [Tooltip("Name of the Credits scene to load after NPC timeline finishes")]
+    public string creditsSceneName = "Credits";
+    [Tooltip("Black full-screen Image for fade out — assign from your Canvas")]
+    public Image fadePanel;
+    [Tooltip("How long the fade to black takes before loading Credits")]
+    public float fadeDuration = 2f;
+    // ─────────────────────────────────────────
 
     private enum LevelPhase
     {
@@ -49,6 +61,9 @@ public class BossLevelManager : MonoBehaviour
 
         if (npcCanvas != null)
             npcCanvas.SetActive(false);
+
+        // Make sure fade panel starts fully transparent
+        SetFadeAlpha(0f);
 
         StartCoroutine(LevelSequence());
     }
@@ -147,7 +162,33 @@ public class BossLevelManager : MonoBehaviour
 
         timelinePlaying = false;
         currentPhase = LevelPhase.Done;
+
+        // ── NEW: Fade out then load Credits ──
+        yield return StartCoroutine(FadeOut());
+        SceneManager.LoadScene(creditsSceneName);
     }
+
+    // ── NEW: Fade helpers ─────────────────────
+    private IEnumerator FadeOut()
+    {
+        float elapsed = 0f;
+        while (elapsed < fadeDuration)
+        {
+            elapsed += Time.deltaTime;
+            SetFadeAlpha(Mathf.Clamp01(elapsed / fadeDuration));
+            yield return null;
+        }
+        SetFadeAlpha(1f);
+    }
+
+    private void SetFadeAlpha(float alpha)
+    {
+        if (fadePanel == null) return;
+        Color c = fadePanel.color;
+        c.a = alpha;
+        fadePanel.color = c;
+    }
+    // ─────────────────────────────────────────
 
     public void OnBossDefeated()
     {

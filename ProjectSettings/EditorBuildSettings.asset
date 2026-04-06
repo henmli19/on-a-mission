@@ -29,4 +29,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Level2Andrea.unity
     guid: 2592d793dbb9929439907b1acb8d6c74
+  - enabled: 1
+    path: Assets/Scenes/Credits.unity
+    guid: 091d7860b07aa0b418e36c5541c26342
   m_configObjects: {}
